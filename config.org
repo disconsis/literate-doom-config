@@ -56,7 +56,6 @@ Aside from those:
 (setq doom-theme 'doom-tomorrow-night)
 #+END_SRC
 
-
 * Evil
 ** Window commands
 By default, windows split to the left and top, which is quite unintuitive (maybe due to English readers' left-to-right bias?)
@@ -71,6 +70,20 @@ I almost always /know/ which evil state I'm in, otherwise a quick ~C-[~ (~ESC~) 
 (after! evil
   (setq evil-echo-state nil))
 #+end_src
+
+=vim-vinegar= allows a lot of dexterity in quickly jumping around the filesystem, with just a few settings. We'll replicate some of that here.
+The most important part is switching to the current directory with a single key press: ~-~
+#+begin_src emacs-lisp
+(after! dired
+  (map! :n "-" #'dired-jump))
+#+end_src
+
+The details in =dired= create a lot of visual clutter and it's rarely needed, so we'll turn it off at the start. If required, it's easily accessible through ~(~.
+#+begin_src emacs-lisp
+(after! dired
+  (add-hook 'dired-mode-hook #'dired-hide-details-mode))
+#+end_src
+
 * Org-mode
 org-mode forms the base of this config, so some quick improvements are sorely needed.
 
