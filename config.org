@@ -1,3 +1,57 @@
 #+TITLE: Literate Doom Config
+#+AUTHOR: Ketan Kanishka (ketan.kanishka@nyu.edu)
+#+PROPERTY: header-args :results none
 
-Stub
+Enable lexical binding for performance
+#+BEGIN_SRC emacs-lisp
+;;; -*- lexical-binding: t; -*-
+#+END_SRC
+
+* Look
+** Font
+Doom uses a number of font variables for customizing different things.
+=doom-font= is the standard font. Since emacs 28, ligatures are composed automatically, so we use a font which has those. Some good options are:
+- JetBrains Mono
+- Iosevka Term
+- Monoid
+- Overpass Mono
+
+There's a few other non-ligature retro fonts which are also nice:
+- Victor Mono
+- Curie
+
+#+BEGIN_SRC emacs-lisp
+(setq doom-font (font-spec :family "JetBrains Mono" :size 15))
+#+END_SRC
+
+
+Next comes the variable-pitch font. This is mostly used for text-based modes like org.
+I use variable-pitch faces in org through =mixed-pitch-mode=, which only applies it to the appropriate faces and makes the others fixed-pitch. So the choice of variable-pitch font must play well with the choice of fixed-pitch (standard) font.
+For some reason, setting =doom-variable-pitch-font= first makes =variable-pitch-mode= have no effect (although setting it after =variable-pitch-mode= is enabled and calling =doom/reload-font= makes it take effect). The default font (Verdana) is already really nice, so we'll let this be for now.
+I'll list good options anyway for posterity:
+- Verdana (the default)
+- Aleo
+- Helvetica Neue
+- ET Book / ET Bembo
+*************** TODO Find out why setting =doom-variable-pitch-font= makes =variable-pitch-mode= fail
+*************** END
+
+Other font settings are:
+- =doom-unicode-font= which is the fallback font for unicode glyphs
+- =doom-unicode-extra-fonts= which is for unicode overrides over the fallback
+- =doom-big-font= which is used for presentations with =doom-big-font-mode=
+The defaults for all of these are pretty good (the last one defaulting to the default =doom-font=)
+
+** Theme
+=doom-themes= provides a number of excellent themes like:
+- doom-one
+- doom-tomorrow-night
+- doom-dracula
+- doom-sourcerer
+
+Aside from those:
+- =tao-yang= is an excellent monochrome light theme, but it's too bright to use in the evenings (insert light-theme joke...)
+
+#+BEGIN_SRC emacs-lisp
+(setq doom-theme 'doom-tomorrow-night)
+#+END_SRC
