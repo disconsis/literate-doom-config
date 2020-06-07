@@ -123,3 +123,12 @@ I like adding empty lines between headlines to keep things neatly organized, but
 (after! org
   (setq org-cycle-separator-lines -1))
 #+end_src
+
+* Spacemacsy keybindings
+Make some keybindings a bit more like Spacemacs.
+~SPC :~ (=M-x=) in particular is really hard to hit for such a commonly-used command.
+#+begin_src emacs-lisp
+(map! :leader
+      :n "SPC" #'counsel-M-x
+      :n ";"   #'pp-eval-expression)
+#+end_src
