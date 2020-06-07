@@ -133,6 +133,13 @@ Make some keybindings a bit more like Spacemacs.
       :n ";"   #'pp-eval-expression)
 #+end_src
 
+Like Spacemacs, Doom maps =localleader= to ~SPC m~, but unlike Spacemacs, does not allow accessing it through ~,~
+We set its insert-mode counterpart to ~C-,~ , which doesn't do anything important by default.
+#+begin_src emacs-lisp
+(setq doom-localleader-key ","
+      doom-localleader-alt-key "C-,")
+#+end_src
+
 * Language-specific settings
 ** Shell
 Shell programs typically only need to look for documentation through man pages. Anything more complicated than that is probably not going to be searchable through a keyword alone. We set the documentation lookup handler accordingly. Either =man= or =woman= would work here, but since they are interactive commands, when called as lookup handlers they ask the user for input instead of just using the one passed to them. To get around this we wrap them in a lambda.
