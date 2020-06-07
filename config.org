@@ -55,3 +55,71 @@ Aside from those:
 #+BEGIN_SRC emacs-lisp
 (setq doom-theme 'doom-tomorrow-night)
 #+END_SRC
+
+* Org-mode
+org-mode forms the base of this config, so some quick improvements are sorely needed.
+
+** Blocks
+First, some templates are needed to quickly add source blocks.
+#+BEGIN_SRC emacs-lisp
+(after! org
+  (dolist (template '(("el" . "src emacs-lisp")
+                      ("hs" . "src haskell")
+                      ("py" . "src python")
+                      ("sh" . "src shell")))
+    (push template org-structure-template-alist)))
+#+END_SRC
+
+** Libraries
+=org-tempo= needs to be loaded for template expansions like =<el= to work.
+#+begin_src emacs-lisp
+(after! org
+  (load "org-tempo"))
+#+end_src
+
+Inline tasks are also incredibly useful. =org-inlinetask= needs to be loaded for this.
+#+begin_src emacs-lisp
+(after! org
+  (load "org-inlinetask"))
+#+end_src
+
+** Look
+Since org is a text-based mode, it is only natural to use variable-pitch fonts with it. However, source blocks and the like should use fixed-pitch fonts. =mixed-pitch-mode= solves this problem.
+We might as well enable this is in all text-based modes. The =mixed-pitch= package resides in the =:ui/zen= module, so that must be enabled for this to work.
+#+begin_src emacs-lisp
+(when (featurep! :ui zen)
+  (add-hook! 'text-mode-hook #'mixed-pitch-mode))
+#+end_src
+
+Line numbers also do not make a lot of sense for text-based modes. Doom adds a hook to enable them in text-mode, so we remove that to reduce computation.
+#+begin_src emacs-lisp
+(remove-hook! 'text-mode-hook #'display-line-numbers-mode)
+(add-hook! 'text-mode-hook :append (setq-local display-line-numbers nil))
+#+end_src
+
+Emphasis markers clutter up the text, so we turn it off.
+#+begin_src emacs-lisp
+(after! org
+  (setq org-hide-emphasis-markers t))
+#+end_src
+
+The default ellipsis looks pretty bad, so add a cool unicode one!
+Good options here are:
+- ⬎
+- 
+#+begin_src emacs-lisp
+(after! org
+  (setq org-ellipsis "  "))
+#+end_src
+
+Make the ellipsis the same color as the headline.
+#+begin_src emacs-lisp
+(after! org
+  (set-face-attribute 'org-ellipsis nil :foreground 'unspecified))
+#+end_src
+
+I like adding empty lines between headlines to keep things neatly organized, but org folds those up along with the block. This prevent this from happening.
+#+begin_src emacs-lisp
+(after! org
+  (setq org-cycle-separator-lines -1))
+#+end_src
