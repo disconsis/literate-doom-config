@@ -188,6 +188,13 @@ We set its insert-mode counterpart to ~C-,~ , which doesn't do anything importan
       doom-localleader-alt-key "C-,")
 #+end_src
 
+* Quit without confirmation
+I almost always end up confirming, so this gets tedious quickly. In any case Doom's quick startup time means I can be back to my session in 2 seconds after quitting. Similarly, I don't really care what processes are running. There's always a few REPLs and shells lying around. After these changes, the only time quitting requires confirmation is when modified buffers exist.
+#+begin_src emacs-lisp
+(setq confirm-kill-emacs nil
+      confirm-kill-processes nil)
+#+end_src
+
 * Language-specific settings
 ** Shell
 Shell programs typically only need to look for documentation through man pages. Anything more complicated than that is probably not going to be searchable through a keyword alone. We set the documentation lookup handler accordingly. Either =man= or =woman= would work here, but since they are interactive commands, when called as lookup handlers they ask the user for input instead of just using the one passed to them. To get around this we wrap them in a lambda.
