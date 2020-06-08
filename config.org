@@ -172,6 +172,13 @@ I like adding empty lines between headlines to keep things neatly organized, but
   (setq org-cycle-separator-lines -1))
 #+end_src
 
+By default the title uses the normal font and height, just in bold. We can make the font a little prettier and hide a few keywords.
+#+begin_src emacs-lisp
+(after! org
+  (pushnew! org-hidden-keywords 'title 'author)
+  (modify-theme! (set-face-attribute 'org-document-title nil :family "FARRAY" :height 3.0)))
+#+end_src
+
 * Spacemacsy keybindings
 Make some keybindings a bit more like Spacemacs.
 ~SPC :~ (=M-x=) in particular is really hard to hit for such a commonly-used command.
