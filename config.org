@@ -163,7 +163,7 @@ Good options here are:
 Make the ellipsis the same color as the headline.
 #+begin_src emacs-lisp
 (after! org
-  (set-face-attribute 'org-ellipsis nil :foreground 'unspecified))
+  (modify-theme! (set-face-attribute 'org-ellipsis nil :foreground 'unspecified)))
 #+end_src
 
 I like adding empty lines between headlines to keep things neatly organized, but org folds those up along with the block. This prevent this from happening.
@@ -225,4 +225,14 @@ Shell programs typically only need to look for documentation through man pages. 
 
   (set-lookup-handlers! 'sh-mode
     :documentation '(my/woman-non-interactive)))
+#+end_src
+
+* Utility functions
+Making theme customizations requires duplicating the code in two places: on startup and in =doom-load-theme-hook= (to survive theme changes). A simple utility macro prevents manual duplication.
+#+begin_src emacs-lisp
+(defmacro modify-theme! (&rest body)
+  "Macro which enables theme modifications to persist theme changes.
+Runs its body right away and also adds it to `doom-load-theme-hook'."
+  `(progn ,@body
+          (add-hook! 'doom-load-theme-hook ,@body)))
 #+end_src
