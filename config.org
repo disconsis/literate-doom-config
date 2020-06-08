@@ -111,11 +111,11 @@ org-mode forms the base of this config, so some quick improvements are sorely ne
 First, some templates are needed to quickly add source blocks.
 #+BEGIN_SRC emacs-lisp
 (after! org
-  (dolist (template '(("el" . "src emacs-lisp")
-                      ("hs" . "src haskell")
-                      ("py" . "src python")
-                      ("sh" . "src shell")))
-    (push template org-structure-template-alist)))
+  (pushnew! org-structure-template-alist
+            '("el" . "src emacs-lisp")
+            '("hs" . "src haskell")
+            '("py" . "src python")
+            '("sh" . "src shell")))
 #+END_SRC
 
 ** Libraries
