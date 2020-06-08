@@ -84,6 +84,26 @@ The details in =dired= create a lot of visual clutter and it's rarely needed, so
   (add-hook 'dired-mode-hook #'dired-hide-details-mode))
 #+end_src
 
+** Unimpaired-style keys
+I'm quite used to turning search highlights on and off with ~[ h~ and ~] h~. In Doom these move between headings in org-mode, but the same action can also be done with ~C-j~ and ~C-k~, so we can safely remap them.
+#+begin_src emacs-lisp
+(after! evil
+  (defun my/evil-search-hl-on ()
+    "Turn on persistent evil search highlights and re-highlight the previous search."
+    (interactive)
+    (setq evil-ex-search-highlight-all t)
+    (save-excursion (evil-ex-search-next)))
+
+  (defun my/evil-search-hl-off ()
+    "Turn off persisten evil search highlights and disable any current highlights."
+    (interactive)
+    (setq evil-ex-search-highlight-all t)
+    (evil-ex-nohighlight))
+
+  (map! :n "[ h" #'my/evil-search-hl-off
+        :n "] h" #'my/evil-search-hl-on))
+#+end_src
+
 * Org-mode
 org-mode forms the base of this config, so some quick improvements are sorely needed.
 
