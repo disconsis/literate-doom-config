@@ -250,7 +250,10 @@ If I'm trying to commit unstaged changes, I'm usually aware of what I'm doing, b
 
 The =magit-delta= package provides nice syntax-highlighted diffs through the [[https://github.com/dandavison/delta][delta]] pager. =delta= is obviously a requirement here.
 #+begin_src emacs-lisp
-(after! magit
+(use-package! magit-delta
+  :after magit
+  :config
+  ;; from what I can gather, this only needs to be called once
   (magit-delta-mode))
 #+end_src
 
