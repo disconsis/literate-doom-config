@@ -179,9 +179,24 @@ I like adding empty lines between headlines to keep things neatly organized, but
 
 By default the title uses the normal font and height, just in bold. We can make the font a little prettier and hide a few keywords.
 #+begin_src emacs-lisp
+(setq +org-title-font "FARRAY")
+(setq +org-title-height 3.0)
+
 (after! org
   (pushnew! org-hidden-keywords 'title 'author)
-  (modify-theme! (set-face-attribute 'org-document-title nil :family "FARRAY" :height 3.0)))
+  (modify-theme! (set-face-attribute 'org-document-title nil :family +org-title-font :height +org-title-height)))
+#+end_src
+
+Similarly, hadings by default are just bolded. Since the default variable-pitch font is sans-serif, I thought it might be nice to mix it up with a serif font for the headings.
+#+begin_src emacs-lisp
+(setq +org-heading-font "Aleo")
+(setq +org-heading-height 1.2)
+
+(after! org
+  (modify-theme!
+   (dolist (lvl (number-sequence 1 8))
+     (let ((face (intern (concat "org-level-" (number-to-string lvl)))))
+       (set-face-attribute face nil :family +org-heading-font :height +org-heading-height)))))
 #+end_src
 
 ** Checkers
