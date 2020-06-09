@@ -179,6 +179,18 @@ By default the title uses the normal font and height, just in bold. We can make 
   (modify-theme! (set-face-attribute 'org-document-title nil :family "FARRAY" :height 3.0)))
 #+end_src
 
+** Checkers
+Text-based modes /should/ have both spelling and grammar checks. For technical writing however, I find I spend my time teaching the spell checker more than anything else. A better dictionary than =aspell= is obviously required.
+*************** TODO Find a better dictionary for technical writing
+*************** END
+In the meantime, we'll turn off spell-checking by default.
+#+begin_src emacs-lisp
+(after! org
+  (remove-hook! 'org-mode-hook #'flyspell-mode))
+#+end_src
+
+*** TODO add bindings for toggling writegood and langtool
+
 * Spacemacsy keybindings
 Make some keybindings a bit more like Spacemacs.
 ~SPC :~ (=M-x=) in particular is really hard to hit for such a commonly-used command.
