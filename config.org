@@ -257,6 +257,12 @@ The =magit-delta= package provides nice syntax-highlighted diffs through the [[h
   (magit-delta-mode))
 #+end_src
 
+The in-buffer stage and revert commands ask for confirmation, which severely reduces their usability. We can turn this off.
+#+begin_src emacs-lisp
+(after! git-gutter
+  (setq git-gutter:ask-p nil))
+#+end_src
+
 * Language-specific settings
 ** Shell
 Shell programs typically only need to look for documentation through man pages. Anything more complicated than that is probably not going to be searchable through a keyword alone. We set the documentation lookup handler accordingly. Either =man= or =woman= would work here, but since they are interactive commands, when called as lookup handlers they ask the user for input instead of just using the one passed to them. To get around this we wrap them in a lambda.
