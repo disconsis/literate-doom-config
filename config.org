@@ -21,7 +21,7 @@ There's a few other non-ligature retro fonts which are also nice:
 - Curie
 
 #+BEGIN_SRC emacs-lisp
-(setq doom-font (font-spec :family "JetBrains Mono" :size 15))
+(setq doom-font (font-spec :family "Iosevka Term" :weight 'light :size 15))
 #+END_SRC
 
 
