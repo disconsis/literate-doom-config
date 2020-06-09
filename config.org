@@ -7,6 +7,11 @@ Enable lexical binding for performance
 ;;; -*- lexical-binding: t; -*-
 #+END_SRC
 
+* Ideas
+** TODO Build a good workflow for research
+Using packages like =org-roam=, =org-noter=, =org-ref=; it's possible to build a good workflow for quickly searching, taking notes, and connecting papers.
+[[https://www.reddit.com/r/emacs/comments/gz4lk8/org_brain_and_org_roam/ftf00ky][This comment by u/Cantos]] describes a really nice implementation of this.
+
 * Look
 ** Font
 Doom uses a number of font variables for customizing different things.
