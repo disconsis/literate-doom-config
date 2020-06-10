@@ -364,6 +364,11 @@ The in-buffer stage and revert commands ask for confirmation, which severely red
   (setq git-gutter:ask-p nil))
 #+end_src
 
+** TODO Allow staging and reverting of partial/multiple chunks in-buffer through visual selections
+This works in Spacemacs and magit diffs, but not in the buffer of the file itself. It's quite useful, so try to make it work.
+
+** TODO Increase fringe-width in magit buffers to be able to show section collapse indicators
+
 * Language-specific settings
 ** Shell
 Shell programs typically only need to look for documentation through man pages. Anything more complicated than that is probably not going to be searchable through a keyword alone. We set the documentation lookup handler accordingly. Either =man= or =woman= would work here, but since they are interactive commands, when called as lookup handlers they ask the user for input instead of just using the one passed to them. To get around this we wrap them in a lambda.
