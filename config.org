@@ -71,6 +71,24 @@ Aside from those:
 (setq doom-theme 'doom-moonlight)
 #+END_SRC
 
+Changing the theme with =counsel-load-theme= has one downside - you can't see the currently active theme. We'll make a slight modification to change that.
+NOTE: I wanted to use the =[remap counsel-load-theme]= syntax here to make the keybinding independent of whatever =counsel-load-theme= is actually bound to, but I couldn't get that to work.
+#+begin_src emacs-lisp
+(defun my/counsel-load-theme-showing-current ()
+  "Minor modification of `counsel-load-theme' to show current theme.
+Forward to `load-theme' while showing the currently loaded themes.
+Usable with `ivy-resume', `ivy-next-line-and-call' and `ivy-previous-line-and-call'."
+  (interactive)
+  (ivy-read (format "Load custom theme [current: %s]: " (s-join ", " (mapcar #'symbol-name custom-enabled-themes)))
+            (mapcar 'symbol-name
+                    (custom-available-themes))
+            :action #'counsel-load-theme-action
+            :caller 'counsel-load-theme))
+
+(map! :map doom-leader-map
+      "h t" #'my/counsel-load-theme-showing-current)
+#+end_src
+
 ** Pretty symbols
 The prettified symbols for quotes are pretty lackluster. We'll use slightly bigger unicode characters to make them stand out.
 #+begin_src emacs-lisp
@@ -218,7 +236,7 @@ By default the title uses the normal font and height, just in bold. We can make 
   (modify-theme! (set-face-attribute 'org-document-title nil :family +org-title-font :height +org-title-height)))
 #+end_src
 
-Similarly, hadings by default are just bolded. Since the default variable-pitch font is sans-serif, I thought it might be nice to mix it up with a serif font for the headings.
+Similarly, headings by default are just bolded. Since the default variable-pitch font is sans-serif, I thought it might be nice to mix it up with a serif font for the headings.
 #+begin_src emacs-lisp
 (setq +org-heading-font "Aleo")
 (setq +org-heading-height 1.2)
