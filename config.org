@@ -144,6 +144,12 @@ Inline tasks are also incredibly useful. =org-inlinetask= needs to be loaded for
   (load "org-inlinetask"))
 #+end_src
 
+*************** TODO Consider adding these libraries as incremental loads
+They take a decent amount of time to load up, which is not ideal.
+Doom's incremental loading feature might be useful for this.
+Maybe they can be loaded after an idle time?
+*************** END
+
 ** Look
 Since org is a text-based mode, it is only natural to use variable-pitch fonts with it. However, source blocks and the like should use fixed-pitch fonts. =mixed-pitch-mode= solves this problem.
 We might as well enable this is in all text-based modes. The =mixed-pitch= package resides in the =:ui/zen= module, so that must be enabled for this to work.
@@ -265,7 +271,6 @@ MimeType=x-scheme-handler/org-protocol" > ~/.local/share/applications/org-protoc
 
 xdg-mime default org-protocol.desktop x-scheme-handler/org-protocol
 #+end_src
-
 
 **** TODO Change file name template to just the title
 Having the date in the file name just clutters it up.
