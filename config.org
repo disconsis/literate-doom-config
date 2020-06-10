@@ -71,6 +71,13 @@ Aside from those:
 (setq doom-theme 'doom-moonlight)
 #+END_SRC
 
+** Pretty symbols
+The prettified symbols for quotes are pretty lackluster. We'll use slightly bigger unicode characters to make them stand out.
+#+begin_src emacs-lisp
+(when (featurep! :ui pretty-code)
+  (plist-put! +pretty-code-symbols :quote "" :quote_end ""))
+#+end_src
+
 ** Banner
 The startup banner image is customizable, and the default text-based banner could stand to look a little bit better.
 [[https://github.com/search?q=setq+%2Bdoom-dashboard-banner-file&type=Code][Searching github for banners]] yielded 4 pages of results - most of them slight variations on the same image. I collected some of the more interesting ones in [[file:banners/][banners/]].
