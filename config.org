@@ -10,6 +10,16 @@ Enable lexical binding for performance
 * Ideas
 Improvement ideas go here.
 
+* Utility functions
+Making theme customizations requires duplicating the code in two places: on startup and in =doom-load-theme-hook= (to survive theme changes). A simple utility macro prevents manual duplication.
+#+begin_src emacs-lisp
+(defmacro modify-theme! (&rest body)
+  "Macro which enables theme modifications to persist theme changes.
+Runs its body right away and also adds it to `doom-load-theme-hook'."
+  `(progn ,@body
+          (add-hook! 'doom-load-theme-hook ,@body)))
+#+end_src
+
 * Look
 ** Font
 Doom uses a number of font variables for customizing different things.
@@ -332,14 +342,4 @@ It's irritating to have to copy and paste a filename from a file just to open it
 #+begin_src emacs-lisp
 (map! :map doom-leader-file-map
       "." #'find-file-at-point)
-#+end_src
-
-* Utility functions
-Making theme customizations requires duplicating the code in two places: on startup and in =doom-load-theme-hook= (to survive theme changes). A simple utility macro prevents manual duplication.
-#+begin_src emacs-lisp
-(defmacro modify-theme! (&rest body)
-  "Macro which enables theme modifications to persist theme changes.
-Runs its body right away and also adds it to `doom-load-theme-hook'."
-  `(progn ,@body
-          (add-hook! 'doom-load-theme-hook ,@body)))
 #+end_src
