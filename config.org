@@ -61,12 +61,14 @@ The defaults for all of these are pretty good (the last one defaulting to the de
 - doom-tomorrow-night
 - doom-dracula
 - doom-sourcerer
+- doom-nord
+- doom-moonlight
 
 Aside from those:
 - =tao-yang= is an excellent monochrome light theme, but it's too bright to use in the evenings (insert light-theme joke...)
 
 #+BEGIN_SRC emacs-lisp
-(setq doom-theme 'doom-tomorrow-night)
+(setq doom-theme 'doom-moonlight)
 #+END_SRC
 
 * Evil
