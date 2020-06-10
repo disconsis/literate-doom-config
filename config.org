@@ -71,6 +71,14 @@ Aside from those:
 (setq doom-theme 'doom-moonlight)
 #+END_SRC
 
+** Banner
+The startup banner image is customizable, and the default text-based banner could stand to look a little bit better.
+[[https://github.com/search?q=setq+%2Bdoom-dashboard-banner-file&type=Code][Searching github for banners]] yielded 4 pages of results - most of them slight variations on the same image. I collected some of the more interesting ones in [[file:banners/][banners/]].
+#+begin_src emacs-lisp
+(setq +doom-dashboard-banner-dir (expand-file-name "banners" doom-private-dir)
+      +doom-dashboard-banner-file "ue.png")
+#+end_src
+
 * Evil
 ** Window commands
 By default, windows split to the left and top, which is quite unintuitive (maybe due to English readers' left-to-right bias?)
