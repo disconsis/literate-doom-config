@@ -189,23 +189,11 @@ First, some templates are needed to quickly add source blocks.
 #+END_SRC
 
 ** Libraries
-=org-tempo= needs to be loaded for template expansions like =<el= to work.
+=org-tempo= needs to be loaded for template expansions like =<el= to work. Inline tasks are also incredibly useful. =org-inlinetask= needs to be loaded for this.
+Since these take a decent amount of time to load and are not /immediately/ required, we can defer their loading. We /don't/ need to guard this with an =after! org= block since they're only loaded when emacs is idle.
 #+begin_src emacs-lisp
-(after! org
-  (load "org-tempo"))
+(doom-load-packages-incrementally '(org-tempo org-inlinetask))
 #+end_src
-
-Inline tasks are also incredibly useful. =org-inlinetask= needs to be loaded for this.
-#+begin_src emacs-lisp
-(after! org
-  (load "org-inlinetask"))
-#+end_src
-
-*************** TODO Consider adding these libraries as incremental loads
-They take a decent amount of time to load up, which is not ideal.
-Doom's incremental loading feature might be useful for this.
-Maybe they can be loaded after an idle time?
-*************** END
 
 ** Look
 Since org is a text-based mode, it is only natural to use variable-pitch fonts with it. However, source blocks and the like should use fixed-pitch fonts. =mixed-pitch-mode= solves this problem.
