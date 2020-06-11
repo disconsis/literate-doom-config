@@ -46,8 +46,12 @@ I'll list good options anyway for posterity:
 - Aleo
 - Helvetica Neue
 - ET Book / ET Bembo
-*************** TODO Find out why setting =doom-variable-pitch-font= makes =variable-pitch-mode= fail
-*************** END
+
+NOTE: Earlier, setting =doom-variable-pitch-font= made =variable-pitch-mode= not use it, for some reason. This seems to not be the case anymore, but I have no idea why.
+
+#+begin_src emacs-lisp
+(setq doom-variable-pitch-font (font-spec :family "Aleo" :weight 'regular))
+#+end_src
 
 Other font settings are:
 - =doom-unicode-font= which is the fallback font for unicode glyphs
@@ -236,16 +240,20 @@ By default the title uses the normal font and height, just in bold. We can make 
   (modify-theme! (set-face-attribute 'org-document-title nil :family +org-title-font :height +org-title-height)))
 #+end_src
 
-Similarly, headings by default are just bolded. Since the default variable-pitch font is sans-serif, I thought it might be nice to mix it up with a serif font for the headings.
+When I was using the default variable-pitch font, I spruced up headings by changing the font. Now that I'm using a better font for everything this doesn't seem as neccessary, but I'll leave this code here in case I want to change the heading font again.
 #+begin_src emacs-lisp
-(setq +org-heading-font "Aleo")
-(setq +org-heading-height 1.2)
+(defvar +org-heading-font nil
+  "Font family to use for org headings.")
+(defvar +org-heading-height 1.2
+  "Height multiplier to use for org headings")
 
 (after! org
   (modify-theme!
-   (dolist (lvl (number-sequence 1 8))
-     (let ((face (intern (concat "org-level-" (number-to-string lvl)))))
-       (set-face-attribute face nil :family +org-heading-font :height +org-heading-height)))))
+   (when (or +org-heading-font +org-heading-height)
+     (dolist (lvl (number-sequence 1 8))
+       (let ((face (intern (concat "org-level-" (number-to-string lvl)))))
+         (when +org-heading-font (set-face-attribute face nil :family +org-heading-font))
+         (when +org-heading-height (set-face-attribute face nil :height +org-heading-height)))))))
 #+end_src
 
 The first few default bullets are okay, but the later ones look a bit ugly. The progression of bullets is also not very uniform.
