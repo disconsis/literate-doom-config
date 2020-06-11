@@ -89,8 +89,14 @@ Usable with `ivy-resume', `ivy-next-line-and-call' and `ivy-previous-line-and-ca
             :action #'counsel-load-theme-action
             :caller 'counsel-load-theme))
 
-(map! :map doom-leader-map
-      "h t" #'my/counsel-load-theme-showing-current)
+#+end_src
+
+We can change the binding of =counsel-load-theme= to point to our function instead.
+NOTE: I wanted to use the =[remap counsel-load-theme]= syntax here to make the keybinding independent of whatever =counsel-load-theme= is actually bound to, but that doesn't work since =counsel-load-theme= is bound by remapping =load-theme=, and [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Remapping-Commands.html][remapped bindings don't propagate through multiple levels]].
+NOTE: =:desc= keys seem to only take effect with /prefixes/ (and not /maps/) with =map!=. (=:leader= is an alias for a =:prefix= property.)
+#+begin_src emacs-lisp
+(map! :leader
+      :desc "change theme" "h t" #'my/counsel-load-theme-showing-current)
 #+end_src
 
 ** Pretty symbols
