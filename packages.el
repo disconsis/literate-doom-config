@@ -3,3 +3,6 @@
 
 ;; syntax-highlighted diffs
 (package! magit-delta)
+
+;; themes
+(package! tao-theme)

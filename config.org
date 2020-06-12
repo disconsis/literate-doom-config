@@ -70,10 +70,20 @@ The defaults for all of these are pretty good (the last one defaulting to the de
 
 Aside from those:
 - =tao-yang= is an excellent monochrome light theme, but it's too bright to use in the evenings (insert light-theme joke...)
+- tao-yin is a similarly good monochrome dark theme, but needs some configuration
+  - by default, it uses sepia instead of grayscale, which doesn't look as good in my opinion
+  - you might like for it to customize heights (especially for org-mode), but as of now it sets such an impossibly tiny size for the modeline that it becomes unusable
 
 #+BEGIN_SRC emacs-lisp
 (setq doom-theme 'doom-moonlight)
 #+END_SRC
+
+We'll make some changes to tao-yin to fix the problems described earlier.
+#+begin_src emacs-lisp
+(after! tao-theme
+  (setq tao-theme-use-sepia nil
+        tao-theme-use-height nil))
+#+end_src
 
 *** Changing themes
 Changing the theme with =counsel-load-theme= has one downside - you can't see the currently active theme.
