@@ -300,7 +300,7 @@ I know that =org-directory= needs to be set before org loads, and the same is pr
 =org-roam= allows customizing where the titles of a particular file are extracted from. It can optionally use the /first/ heading for this, which seems a bit untuitive to me, so we'll remove that as a source.
 #+begin_src emacs-lisp
 (after! org-roam
-  (setq org-roam-title-source '(title alias)))
+  (setq org-roam-title-sources '(title alias)))
 #+end_src
 
 The backlinks buffer is set to the right be default, which takes up a lot of the screen width. Roam research puts it at the bottom, so let's try that out for size. We'll also make this a bit smaller than normal to save more space for the main buffer.
