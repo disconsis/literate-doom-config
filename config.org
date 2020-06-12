@@ -310,6 +310,21 @@ The backlinks buffer is set to the right be default, which takes up a lot of the
   (setq org-roam-buffer-height 0.20))
 #+end_src
 
+*** Capture templates
+The default capture template puts the date in the file name, which just clutters it up. We can fix this by changing the template. We also add prompts for aliases and tags for the file while we're at it.
+#+begin_src emacs-lisp
+(after! org-roam
+  (setq org-roam-capture-templates
+        '(("d" "default" plain (function org-roam-capture--get-point)
+"#+roam_alias: %^{Aliases}
+#+roam_tags:  %^{Tags}
+
+%?"
+           :file-name "${slug}"
+           :head "#+title: ${title}\n"
+           :unnarrowed t))))
+#+end_src
+
 *** Setting up org-protocol
 org-protocol needs to be set up for =org-roam= to capture requests from anywhere in the system (including the org-roam graph).
 
@@ -332,9 +347,6 @@ MimeType=x-scheme-handler/org-protocol" > ~/.local/share/applications/org-protoc
 
 xdg-mime default org-protocol.desktop x-scheme-handler/org-protocol
 #+end_src
-
-**** TODO Change file name template to just the title
-Having the date in the file name just clutters it up.
 
 **** TODO Install =org-roam-server= for more interactive graphs
 
