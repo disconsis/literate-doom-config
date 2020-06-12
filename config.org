@@ -75,23 +75,24 @@ Aside from those:
 (setq doom-theme 'doom-moonlight)
 #+END_SRC
 
+*** Changing themes
 Changing the theme with =counsel-load-theme= has one downside - you can't see the currently active theme.
 However, some themes like =solaire-swap-bg-theme= are always loaded (at least in my setup), but these aen't something I want to know about each time I try to change themes. For this we set a list of ignores.
 #+begin_src emacs-lisp
-(defvar my/counsel-load-theme-ignore-prefixes '("solaire-")
+(defvar +counsel-load-theme-ignore-prefixes '("solaire-")
   "Prefix of themes to ignore when displaying the current theme with `my/counsel-load-theme-showing-current'.")
 #+end_src
 
 We'll make a slight modification to =counsel-load-them= to display the current theme.
 #+begin_src emacs-lisp
-(defun my/counsel-load-theme-showing-current ()
+(defun +counsel-load-theme ()
   "Minor modification of `counsel-load-theme' to show current theme.
 Forward to `load-theme' while showing the currently loaded themes.
 Usable with `ivy-resume', `ivy-next-line-and-call' and `ivy-previous-line-and-call'."
   (interactive)
   (let* ((enabled-themes (mapcar #'symbol-name custom-enabled-themes))
          (should-ignore (lambda (theme)
-                          (-any-p (lambda (prefix) (s-prefix-p prefix theme)) my/counsel-load-theme-ignore-prefixes)))
+                          (-any-p (lambda (prefix) (s-prefix-p prefix theme)) +counsel-load-theme-ignore-prefixes)))
          (enabled-themes-without-ignores (-remove should-ignore enabled-themes))
          (enabled-theme-string (if enabled-themes-without-ignores
                                    (s-join ", " enabled-themes-without-ignores)
@@ -108,7 +109,7 @@ NOTE: I wanted to use the =[remap counsel-load-theme]= syntax here to make the k
 NOTE: =:desc= keys seem to only take effect with /prefixes/ (and not /maps/) with =map!=. (=:leader= is an alias for a =:prefix= property.)
 #+begin_src emacs-lisp
 (map! :leader
-      :desc "change theme" "h t" #'my/counsel-load-theme-showing-current)
+      :desc "change theme" "h t" #'+counsel-load-theme)
 #+end_src
 
 ** Pretty symbols
