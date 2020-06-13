@@ -299,7 +299,7 @@ In the meantime, we'll turn off spell-checking by default.
 
 ** Notes
 Using packages like =org-roam=, =org-noter=, =org-ref=; it's possible to build a good workflow for quickly searching, taking notes, and connecting papers.
-[[https://www.reddit.com/r/emacs/comments/gz4lk8/org_brain_and_org_roam/ftf00ky][This comment by u/Cantos]] describes a really nice implementation of this.
+[[https://www.reddit.com/r/emacs/comments/gz4lk8/org_brain_and_org_roam/ftf00ky][This comment by u/Cantos]] describes a really nice implementation of this - [[https://github.com/sunnyhasija/DOOMEmacs][dotfiles]]
 
 First of all, set the directory for the notes. I use Dropbox to back them up and possibly access them on mobile.
 I know that =org-directory= needs to be set before org loads, and the same is probably also true for =org-roam-directory=; so *don't* put this in an =after!= block.
@@ -336,6 +336,40 @@ The default capture template puts the date in the file name, which just clutters
            :unnarrowed t))))
 #+end_src
 
+*** More interactive graphs
+=org-roam-server= provides a /huge/ amount of interactivity for navigating notes - hover preview, tag filtering, clustered nodes which expand on clicking, and more!
+#+begin_src emacs-lisp
+(use-package! org-roam-server
+  :commands org-roam-server-mode)
+#+end_src
+
+By default it uses port 8080 for the server. Since it's pretty common to use that port in development and we should be never have to remember it, we'll set it to something more esoteric.
+#+begin_src emacs-lisp
+(after! org-roam-server
+  (setq org-roam-server-port 65529))
+#+end_src
+
+=org-roam-server= does not provide any way to automatically browse to the served address, and neither does it start automatically. We'll make both of those things happen. Note that =org-roam-server-mode-hook= is called both when the mode is enabled /and/ when it's disabled, so we have to explicitly check before we browse to its url.
+*************** TODO Open this url with a dedicated browser instead of opening it in a new tab
+With multiple browsers open it's hard to tell where it'll open. Even if there's just a single one open, it's often dedicated to a particular thing (videos, documentation...) - in which case I don't want org-roam-server to overtake it. This can be solved by dedicating a new browser for it.
+Ideally this browser would be lightweight af since it just needs to run some javascript.
+*************** END
+
+#+begin_src emacs-lisp
+(after! org-roam-server
+  (defun my/org-roam-server-browse-to ()
+    (interactive)
+    (browse-url-xdg-open (format "http://%s:%d" org-roam-server-host org-roam-server-port)))
+
+  (add-hook! 'org-roam-server-mode-hook
+    (when org-roam-server-mode (my/org-roam-server-browse-to))))
+#+end_src
+
+We'll also replace our keybindings to point to org-roam-server instead of org-roam's default graph command.
+#+begin_src emacs-lisp
+(map! :leader "n r g" #'org-roam-server-mode)
+#+end_src
+
 *** Setting up org-protocol
 org-protocol needs to be set up for =org-roam= to capture requests from anywhere in the system (including the org-roam graph).
 
@@ -358,8 +392,6 @@ MimeType=x-scheme-handler/org-protocol" > ~/.local/share/applications/org-protoc
 
 xdg-mime default org-protocol.desktop x-scheme-handler/org-protocol
 #+end_src
-
-**** TODO Install =org-roam-server= for more interactive graphs
 
 * Spacemacsy keybindings
 Make some keybindings a bit more like Spacemacs.

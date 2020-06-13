@@ -7,5 +7,8 @@
 ;; syntax-highlighted diffs
 (package! magit-delta)
 
+;; more interactive org-roam graphs
+(package! org-roam-server)
+
 ;; themes
 (package! tao-theme)
