@@ -85,6 +85,18 @@ We'll make some changes to tao-yin to fix the problems described earlier.
         tao-theme-use-height nil))
 #+end_src
 
+Another problem with the tao themes is that they assign the same colors to =git-gutter-fr:modified= and =git-gutter-fr:added= (and to =git-gutter:{modified,added}=, but Doom doesn't use those).
+We can change them slightly while maintaining the monochrome /a e s t h e t i c/.
+#+begin_src emacs-lisp
+(after! tao-theme
+  (modify-theme!
+   (when-let* ((theme (car (-intersection '(tao-yin tao-yang) custom-enabled-themes)))
+               (theme-minus-tao (nth 1 (s-split-up-to "-" (symbol-name theme) 1)))
+               (palette (intern (concat "tao-theme-" theme-minus-tao "-palette")))
+               (color (alist-get "color-15" (funcall palette) nil nil #'string-equal)))
+     (set-face-attribute 'git-gutter-fr:added nil :foreground color))))
+#+end_src
+
 *** Changing themes
 Changing the theme with =counsel-load-theme= has one downside - you can't see the currently active theme.
 However, some themes like =solaire-swap-bg-theme= are always loaded (at least in my setup), but these aen't something I want to know about each time I try to change themes. For this we set a list of ignores.
