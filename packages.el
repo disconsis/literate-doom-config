@@ -12,3 +12,6 @@
 
 ;; themes
 (package! tao-theme)
+
+;; get all updates for org-roam
+(package! org-roam :pin nil)
