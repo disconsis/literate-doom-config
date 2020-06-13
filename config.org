@@ -97,6 +97,24 @@ We can change them slightly while maintaining the monochrome /a e s t h e t i c/
      (set-face-attribute 'git-gutter-fr:added nil :foreground color))))
 #+end_src
 
+*** Matching parentheses
+=show-smartparens-mode= is responsible for highlighting the matching parenthesis. For most themes this highlight is too subtle to notice. One way to fix this is to draw boxes around the matching parenthesis.
+Another way is described by [[https://with-emacs.com/posts/ui-hacks/show-matching-lines-when-parentheses-go-off-screen/][this with-emacs post]] which uses =blink-matching-open= to display an overlay showing the matching open parenthesis. The code /looks/ a little bit messy, which is why I haven't experimented with it yet.
+
+For now, we'll just use =show-smartparens-mode= everywhere.
+#+begin_src emacs-lisp
+(after! smartparens
+  (setq sp-show-pair-delay 0)) ;; no reason to have a delay
+
+(add-hook! '(prog-mode-hook org-mode-hook) #'show-smartparens-mode)
+#+end_src
+
+And then let's make the boxes.
+#+begin_src emacs-lisp
+(after! smartparens
+  (modify-theme! (set-face-attribute 'sp-show-pair-match-face nil :box t)))
+#+end_src
+
 *** Changing themes
 Changing the theme with =counsel-load-theme= has one downside - you can't see the currently active theme.
 However, some themes like =solaire-swap-bg-theme= are always loaded (at least in my setup), but these aen't something I want to know about each time I try to change themes. For this we set a list of ignores.
@@ -105,7 +123,7 @@ However, some themes like =solaire-swap-bg-theme= are always loaded (at least in
   "Prefix of themes to ignore when displaying the current theme with `my/counsel-load-theme-showing-current'.")
 #+end_src
 
-We'll make a slight modification to =counsel-load-them= to display the current theme.
+We'll make a slight modification to =counsel-load-theme= to display the current theme.
 #+begin_src emacs-lisp
 (defun +counsel-load-theme ()
   "Minor modification of `counsel-load-theme' to show current theme.
