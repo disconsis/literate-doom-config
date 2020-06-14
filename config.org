@@ -229,6 +229,15 @@ I'm quite used to turning search highlights on and off with ~[ h~ and ~] h~. In 
         :n "] h" #'my/evil-search-hl-on))
 #+end_src
 
+Doom sets ~[ e~ and ~] e~ to move between errors. I'm used to using them to /exchange/ lines, so I'll change them. We'll bind keys for errors later.
+#+begin_src emacs-lisp
+(use-package! move-text
+  :after-call (move-text-line-up move-text-line-down)
+  :init
+  (map! :n "[ e" #'move-text-line-up
+        :n "] e" #'move-text-line-down))
+#+end_src
+
 * Org-mode
 org-mode forms the base of this config, so some quick improvements are sorely needed.
 
@@ -446,8 +455,17 @@ Make some keybindings a bit more like Spacemacs.
       :n ";"   #'pp-eval-expression)
 #+end_src
 
+* Checkers & Errors
+Vim moves between errors through the "location list", so vim-unimpaired uses ~[ l~ and ~] l~ to move between errors. Since we're using ~[ e~ and ~] e~ to exchange lines, we'll use the same keys for error navigation.
 #+begin_src emacs-lisp
+(map! :n "[ l" #'previous-error
+      :n "] l" #'next-error)
 #+end_src
+
+Moving between errors is achieved through ={next,previous}-error=. These sometimes fail where =flycheck-{next,previous}-error= succeeds. I'm not sure why, and I don't want to use the flycheck functions all the time since Doom also uses other sources of errors.
+*************** TODO Find the problem and fix it
+*************** END
+
 
 * Quit without confirmation
 I almost always end up confirming, so this gets tedious quickly. In any case Doom's quick startup time means I can be back to my session in 2 seconds after quitting. Similarly, I don't really care what processes are running. There's always a few REPLs and shells lying around. After these changes, the only time quitting requires confirmation is when modified buffers exist.

@@ -15,3 +15,6 @@
 
 ;; get all updates for org-roam
 (package! org-roam :pin nil)
+
+;; utility package
+(package! move-text)
