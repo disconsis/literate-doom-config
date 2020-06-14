@@ -168,6 +168,20 @@ The startup banner image is customizable, and the default text-based banner coul
 #+end_src
 
 * Evil
+** Leader keys
+Like Spacemacs, Doom maps =localleader= to ~SPC m~, but unlike Spacemacs, does not allow accessing it through ~,~
+We set its insert-mode counterpart to ~C-,~ , which doesn't do anything important by default.
+#+begin_src emacs-lisp
+(setq doom-localleader-key ","
+      doom-localleader-alt-key "C-,")
+#+end_src
+
+Doom sets =leader= to ~SPC~ (which I want) and =leader-alt= (for insert & emacs mode) to ~M-SPC~ (which I don't). ~C-SPC~ works though, and it follows a similar pattern to the localleader bindings.
+#+begin_src emacs-lisp
+(setq doom-leader-key "SPC"
+      doom-leader-alt-key "C-SPC")
+#+end_src
+
 ** Window commands
 By default, windows split to the left and top, which is quite unintuitive (maybe due to English readers' left-to-right bias?)
 #+begin_src emacs-lisp
@@ -432,11 +446,7 @@ Make some keybindings a bit more like Spacemacs.
       :n ";"   #'pp-eval-expression)
 #+end_src
 
-Like Spacemacs, Doom maps =localleader= to ~SPC m~, but unlike Spacemacs, does not allow accessing it through ~,~
-We set its insert-mode counterpart to ~C-,~ , which doesn't do anything important by default.
 #+begin_src emacs-lisp
-(setq doom-localleader-key ","
-      doom-localleader-alt-key "C-,")
 #+end_src
 
 * Quit without confirmation
