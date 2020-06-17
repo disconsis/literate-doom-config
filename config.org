@@ -520,6 +520,28 @@ Shell programs typically only need to look for documentation through man pages. 
     :documentation '(my/woman-non-interactive)))
 #+end_src
 
+* PDF
+Auto-save PDFs on any annotation changes. This handles adding, deleting, and editing annotations. I find myelf constantly typing ~:wq~  without this.
+#+begin_src emacs-lisp
+(after! pdf-tools
+  (advice-add #'pdf-annot-edit-contents-commit
+              :after (ignore (save-buffer))))
+#+end_src
+
+=pdf-sync-minor-mode= sometimes hangs on mouse events. I'm usually dealing with PDFs more than TeX files, so we might as well remove it.
+#+begin_src emacs-lisp
+(after! pdf-tools
+  (delete! 'pdf-history-minor-mode pdf-tools-enabled-modes))
+#+end_src
+
+I rarely view wide PDFs, so horizontal scrolling is not very useful. Instead, using ~h~ & ~l~ can be used for moving between pages is much more "ergonomic".
+#+begin_src emacs-lisp
+(after! pdf-tools
+  (map! :map pdf-view-mode-map
+        :n "h" #'pdf-view-previous-page-command
+        :n "l" #'pdf-view-next-page-command))
+#+end_src
+
 * Filesystem
 It's irritating to have to copy and paste a filename from a file just to open it. =find-file-at-point= accomplishes this. Note that this is different from =org-open-at-point=, since I want to follow filenames in strings as well.
 #+begin_src emacs-lisp
