@@ -20,6 +20,21 @@ Runs its body right away and also adds it to `doom-load-theme-hook'."
           (add-hook! 'doom-load-theme-hook ,@body)))
 #+end_src
 
+Apply defaults to a value. Lisp version of Haskell's =fromMaybe=.
+#+begin_src emacs-lisp
+(defun from-nil (value default)
+  (if value value default))
+#+end_src
+
+Delete elements from a sequence in place.
+#+begin_src emacs-lisp
+(defmacro delete! (elt seq &optional test)
+  "Deletes all instances of ELT from SEQ in place. Uses `equal' as TEST by default."
+  `(let ((final-test (from-nil ,test #'equal)))
+     (require 'dash)
+     (setq ,seq (-remove (lambda (item) (funcall final-test ,elt item)) ,seq))))
+#+end_src
+
 * Look
 ** Font
 Doom uses a number of font variables for customizing different things.
