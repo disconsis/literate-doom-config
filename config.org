@@ -183,6 +183,21 @@ The startup banner image is customizable, and the default text-based banner coul
       +doom-dashboard-banner-file "ue.png")
 #+end_src
 
+** Startup color
+When Doom Emacs starts, there's a blinding flash of white light. Even though it's for a really short time (Doom loads super quick ) it's harsh enough to hurt my eyes, especially at night. We can change the default frame parameters to make the background color dark.
+This can be done in two ways:
+1. modifying the =default-frame-alist= variable (or related ones)
+2. modifying X files (like .Xdefaults)
+
+The first one doesn't quite work if we do it in our main config file (config.el or config.org) since this is loaded /after/ Doom starts, and by then we've already been blinded. I would still like to use elisp for this, even at the cost of a dirty hack, since then we can programmatically make changes (such as setting the startup background color to the one set by =doom-theme=).
+
+The other way is to simply add the following line to .Xdefaults:
+#+BEGIN_SRC conf :tangle no
+emacs.background: #000000
+#+END_SRC
+
+I might end up setting an(other) advice around =counsel-load-theme= which changes this line to use the default background color.
+
 * Evil
 ** Leader keys
 Like Spacemacs, Doom maps =localleader= to ~SPC m~, but unlike Spacemacs, does not allow accessing it through ~,~
