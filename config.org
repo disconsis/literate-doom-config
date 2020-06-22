@@ -10,7 +10,7 @@ Enable lexical binding for performance
 * Ideas
 Improvement ideas go here.
 
-* Utility functions
+* Utility functions/packages
 Making theme customizations requires duplicating the code in two places: on startup and in =doom-load-theme-hook= (to survive theme changes). A simple utility macro prevents manual duplication.
 #+begin_src emacs-lisp
 (defmacro modify-theme! (&rest body)
@@ -33,6 +33,14 @@ Delete elements from a sequence in place.
   `(let ((final-test (from-nil ,test #'equal)))
      (require 'dash)
      (setq ,seq (-remove (lambda (item) (funcall final-test ,elt item)) ,seq))))
+#+end_src
+
+The =persistent-echo= package uses the echo area to display messages whenever it's free.
+#+begin_src emacs-lisp
+(use-package! persistent-echo
+    :load-path "local/persistent-echo"
+    :commands (persistent-echo-mode persistent-echo-enable)
+    :defines persistent-echo-display-function)
 #+end_src
 
 * Look
