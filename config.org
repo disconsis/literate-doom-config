@@ -216,6 +216,21 @@ emacs.background: #000000
 
 I might end up setting an(other) advice around =counsel-load-theme= which changes this line to use the default background color.
 
+* Workspaces
+Since the workspace list disappears so quickly, I often forget about the presence of other workspaces. This detracts from the usefulness of =persp-mode= (or =:ui workspaces=), and I end up destroying the separation of projects.
+For now I've resorted to just spamming it in the echo area whenever possible (using the =persistent-echo= package).
+*************** TODO Find a less hacky way to keep workspaces displayed
+*************** END
+
+We hook the echoing onto the loading of the workspace module. This has the dual benefit of
+1. reducing startup time
+ 2. not polluting the echo area till the workspace module is first used
+
+#+begin_src emacs-lisp
+(after-module! (:ui workspaces "autoload/workspaces.el")
+  (persistent-echo-enable #'+workspace--tabline))
+#+end_src
+
 * Evil
 ** Leader keys
 Like Spacemacs, Doom maps =localleader= to ~SPC m~, but unlike Spacemacs, does not allow accessing it through ~,~
