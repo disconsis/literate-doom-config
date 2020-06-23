@@ -48,6 +48,8 @@
 ;;; Code:
 
 (require 'pdf-annot)
+(require 'dash)
+(require 's)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -55,7 +57,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun pdf-easy-annot/add-hl-advice (&rest _)
-  (call-interactively #'pdf-annot-add-highlight-markup-annotation))
+  "Auto-highlight selected region."
+  (when-let ((region (pdf-view-active-region t)))
+    (pdf-annot-add-highlight-markup-annotation
+     region pdf-easy-annot--auto-hl-active-color)))
 
 
 ;; Possible indicators for other modes:
@@ -66,21 +71,42 @@ Must be set *before* turning on `pdf-easy-annot-auto-hl-minor-mode'.
 Set to `nil' to disable.")
 
 
-(defun pdf-easy-annot/auto-hl-mode-line-color ()
-  "Foreground color to use for mode line indicator.
-TODO This *should* be the color that will be used for the next highlighting.
-Right now it's just the default color."
-  (cdr (assq 'color (assq 'highlight pdf-annot-default-annotation-properties))))
+(defvar pdf-easy-annot-auto-hl-button-colors '("yellow")
+  "List of colors to make buttons for, irrespective of history.")
+
+
+(defvar pdf-easy-annot--auto-hl-active-color
+  (cdr (assq 'color (assq 'highlight pdf-annot-default-annotation-properties)))
+  "Color to use for future highlights.
+Use the defaults from `pdf-annot-default-annotation-properties' at the start.")
+
+(defun pdf-easy-annot--auto-hl-color-make-button (color)
+  (propertize
+   "" ;; TODO what if it's not displayable?
+   'help-echo "Change highlight color"
+   'font-lock-face `(:foreground ,color)
+   'mouse-face `(:foreground ,color :background ,color)
+   'local-map
+   (make-mode-line-mouse-map
+    'mouse-1 (lambda (&rest _)
+               (interactive)
+               (when (not (equal color pdf-easy-annot--auto-hl-active-color))
+                 (setq pdf-easy-annot--auto-hl-active-color color)
+                 (force-mode-line-update) ;; to update indicator color
+                 )))))
 
 
 (defun pdf-easy-annot/auto-hl-mode-line-info ()
   "Mode line sexp built from `pdf-easy-annot-auto-hl-mode-line-indicator'.
 Uses the foreground color which will be used for the next highlighting.
-TODO check if the indicator is displayable, otherwise use a default ('HL' ?)"
-
-  (let ((fg-color (pdf-easy-annot/auto-hl-mode-line-color)))
-    (propertize pdf-easy-annot-auto-hl-mode-line-indicator 'font-lock-face
-                `(:foreground ,fg-color))))
+TODO check if the indicator is displayable, otherwise use a default ('HL' ?)
+TODO Add a button for the default color"
+  (s-join " "
+   (-snoc
+    (-map #'pdf-easy-annot--auto-hl-color-make-button
+          (-union pdf-easy-annot-auto-hl-button-colors pdf-annot-color-history))
+    (propertize pdf-easy-annot-auto-hl-mode-line-indicator
+     'font-lock-face `(:foreground ,pdf-easy-annot--auto-hl-active-color)))))
 
 
 ;;;###autoload
