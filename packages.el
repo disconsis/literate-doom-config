@@ -16,5 +16,8 @@
 ;; get all updates for org-roam
 (package! org-roam :pin nil)
 
+;; toggle latex fragments on the go
+(package! org-fragtog)
+
 ;; utility package
 (package! move-text)

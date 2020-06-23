@@ -402,6 +402,13 @@ We can also display bullets as checkmarks for todo headings.
   (setq org-superstar-special-todo-items t))
 #+end_src
 
+** LaTeX
+=org-fragtog= allows automatically toggling fragments whenever the cursor is on them.
+#+begin_src emacs-lisp
+(use-package! org-fragtog
+  :hook (org-mode . org-fragtog-mode))
+#+end_src
+
 ** Checkers
 Text-based modes /should/ have both spelling and grammar checks. For technical writing however, I find I spend my time teaching the spell checker more than anything else. A better dictionary than =aspell= is obviously required.
 *************** TODO Find a better dictionary for technical writing
