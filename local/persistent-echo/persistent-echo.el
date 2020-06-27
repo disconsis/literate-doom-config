@@ -11,7 +11,6 @@
 
 (defcustom persistent-echo-delay 1
   "How long to wait after the echo area is empty to start using it")
-
 (defun persistent-echo--default-function ()
   "Default echo function which prints an error."
   "Please set `persistent-echo-display-function' to a useful value!")
@@ -26,7 +25,7 @@
 (defun persistent-echo--display ()
   "Activate empty echo area display."
   (interactive)
-  (unless (active-minibuffer-window)
+  (unless (or (active-minibuffer-window) (current-message))
     (let* ((message-log-max nil)) ; do not insert to *Messages* buffer
       (message "%s" (funcall persistent-echo-display-function)))
     (setq persistent-echo--display-active t)))
