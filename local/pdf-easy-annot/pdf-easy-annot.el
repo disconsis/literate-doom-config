@@ -44,6 +44,7 @@
 ;; TODO Add color buttons to mode line to quickly switch highlight colors
 ;; TODO Auto-add text annots on click (as opposed to selection - which highlights)
 ;; TODO Enable mouse passthrough when clicking on an annotation to activate it
+;; TODO Change `pdf-view-region' face's background to active highlight color
 ;;
 ;;; Code:
 
@@ -80,20 +81,35 @@ Set to `nil' to disable.")
   "Color to use for future highlights.
 Use the defaults from `pdf-annot-default-annotation-properties' at the start.")
 
+(defvar pdf-easy-annot-color-button-indicator ""
+  "String used for the color buttons on the modeline.")
+
 (defun pdf-easy-annot--auto-hl-color-make-button (color)
   (propertize
-   "" ;; TODO what if it's not displayable?
-   'help-echo "Change highlight color"
+   pdf-easy-annot-color-button-indicator
+   'help-echo (format "mouse-1: change highlight color to %s
+mouse-3: remove this button" color)
    'font-lock-face `(:foreground ,color)
    'mouse-face `(:foreground ,color :background ,color)
    'local-map
-   (make-mode-line-mouse-map
-    'mouse-1 (lambda (&rest _)
-               (interactive)
-               (when (not (equal color pdf-easy-annot--auto-hl-active-color))
-                 (setq pdf-easy-annot--auto-hl-active-color color)
-                 (force-mode-line-update) ;; to update indicator color
-                 )))))
+   (let ((map (make-sparse-keymap)))
+     (define-key map [mode-line mouse-1]
+       (lambda (&rest _)
+         (interactive)
+         (when (not (equal color pdf-easy-annot--auto-hl-active-color))
+           (setq pdf-easy-annot--auto-hl-active-color color)
+           (force-mode-line-update) ;; to update indicator color
+           )))
+     (define-key map [mode-line mouse-3]
+       (lambda (&rest _)
+         (interactive)
+         (setq pdf-easy-annot-auto-hl-button-colors
+               (remove color pdf-easy-annot-auto-hl-button-colors))
+         (setq pdf-annot-color-history
+               (remove color pdf-annot-color-history))
+         (message (format "color button '%s' removed" color))
+         (force-mode-line-update)))
+     map)))
 
 
 (defun pdf-easy-annot/auto-hl-mode-line-info ()
@@ -105,8 +121,17 @@ TODO Add a button for the default color"
    (-snoc
     (-map #'pdf-easy-annot--auto-hl-color-make-button
           (-union pdf-easy-annot-auto-hl-button-colors pdf-annot-color-history))
+    "|"
     (propertize pdf-easy-annot-auto-hl-mode-line-indicator
-     'font-lock-face `(:foreground ,pdf-easy-annot--auto-hl-active-color)))))
+                'font-lock-face `(:foreground ,pdf-easy-annot--auto-hl-active-color)
+                'help-echo "mouse-1: disable auto-hl minor mode"
+                'local-map
+                (make-mode-line-mouse-map
+                 'mouse-1
+                 (lambda (&rest _)
+                   (interactive)
+                   (pdf-easy-annot-auto-hl-minor-mode -1)
+                   (force-mode-line-update)))))))
 
 
 ;;;###autoload
