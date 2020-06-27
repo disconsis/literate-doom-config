@@ -164,3 +164,15 @@
        :config
        literate
        (default +bindings +smartparens))
+
+
+
+;; +-------------------------------+
+;; | Module pre-load configuration |
+;; +-------------------------------+
+
+;; For evil keys like `j' ,`k' etc. to use their visual-line
+;; counterparts, this variable needs to be set, and before `evil'
+;; is loaded - therefore putting it in [[config.el]] does not have
+;; the desired effect.
+(setq evil-respect-visual-line-mode t)
