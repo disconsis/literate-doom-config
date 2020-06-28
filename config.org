@@ -683,7 +683,6 @@ Moving between errors is achieved through ={next,previous}-error=. These sometim
 *************** TODO Find the problem and fix it
 *************** END
 
-
 * Quit without confirmation
 I almost always end up confirming, so this gets tedious quickly. In any case Doom's quick startup time means I can be back to my session in 2 seconds after quitting. Similarly, I don't really care what processes are running. There's always a few REPLs and shells lying around. After these changes, the only time quitting requires confirmation is when modified buffers exist.
 #+begin_src emacs-lisp
@@ -706,10 +705,12 @@ If I'm trying to commit unstaged changes, I'm usually aware of what I'm doing, b
 #+end_src
 
 The =magit-delta= package provides nice syntax-highlighted diffs through the [[https://github.com/dandavison/delta][delta]] pager. =delta= is obviously a requirement here.
+While this looks okay with light themes, it's pretty ugly with dark ones. This is mostly because of the dark diff background color. We'll make this slightly better by making both light and dark themes be the same.
 #+begin_src emacs-lisp
 (use-package! magit-delta
   :after magit
   :config
+  (setq magit-delta-default-dark-theme magit-delta-default-light-theme)
   ;; from what I can gather, this only needs to be called once
   (magit-delta-mode))
 #+end_src
