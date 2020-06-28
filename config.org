@@ -740,7 +740,8 @@ By default, the workflow for highlighting in a pdf is pretty cumbersome. I wrote
 Auto-save PDFs on any annotation changes. This handles adding, deleting, and editing annotations. I find myelf constantly typing ~:wq~ without this. This should come at the end of this list so that so that if any functions modify the annotation then it's saved later.
 #+begin_src emacs-lisp
 (after! pdf-tools
-  (add-to-list 'pdf-annot-modified-functions (cmd! (save-buffer)) t))
+  (add-hook! 'pdf-view-mode-hook :append
+    (add-to-list 'pdf-annot-modified-functions (cmd! (save-buffer)) t)))
 #+end_src
 
 * Filesystem
