@@ -23,6 +23,8 @@ Things that would be nice to be displayed ($\leq$ everything on the bar):
 The hard part here is detecting when the frame is fullscreened due to the fact that I'm using a tiling window manager. The information resulting from =(frame-parameter nil 'fullscreen)= is thus not accurate.
 ** TODO Better key for =+popup/toggle= and friends
 ** TODO Easier following of compilation buffer, and allow switching to it (maybe with ~, p M~) since it doesn't show up with ~SPC b b~
+** Remap '-' to act like ~q~ in popup buffers, or at least the help popups
+Works like vim-vinegar as in it goes to the previous help (vs directory).
 
 * Utility functions/packages
 Making theme customizations requires duplicating the code in two places: on startup and in =doom-load-theme-hook= (to survive theme changes). A simple utility macro prevents manual duplication.
