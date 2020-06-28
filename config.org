@@ -80,8 +80,11 @@ There's a few other non-ligature retro fonts which are also nice:
 - Victor Mono
 - Curie
 
+Some quirky unique fonts:
+- Hurmit
+
 #+BEGIN_SRC emacs-lisp
-(setq doom-font (font-spec :family "Iosevka Term SS02" :weight 'light :size 15))
+(setq doom-font (font-spec :family "Pragmata Pro" :size 15))
 #+END_SRC
 
 
@@ -97,7 +100,7 @@ I'll list good options anyway for posterity:
 NOTE: Earlier, setting =doom-variable-pitch-font= made =variable-pitch-mode= not use it, for some reason. This seems to not be the case anymore, but I have no idea why.
 
 #+begin_src emacs-lisp
-(setq doom-variable-pitch-font (font-spec :family "Aleo" :weight 'regular))
+(setq doom-variable-pitch-font (font-spec :family "Aleo" :weight 'light))
 #+end_src
 
 Other font settings are:
@@ -105,6 +108,9 @@ Other font settings are:
 - =doom-unicode-extra-fonts= which is for unicode overrides over the fallback
 - =doom-big-font= which is used for presentations with =doom-big-font-mode=
 The defaults for all of these are pretty good (the last one defaulting to the default =doom-font=)
+
+
+*** TODO Add =doom-unicode-font= as fallback
 
 ** Theme
 =doom-themes= provides a number of excellent themes like:
