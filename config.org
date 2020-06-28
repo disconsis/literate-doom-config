@@ -752,21 +752,30 @@ if the page number has changed."
         :n "l" #'+pdf-view-next-page-top))
 #+end_src
 
-** Easy highlighting
-By default, the workflow for highlighting in a pdf is pretty cumbersome. I wrote a simple package [[file:local/pdf-easy-annot/][pdf-easy-annot]] to highlight text automatically when selected. Note that since this is a local package, it [[https://github.com/hlissner/doom-emacs/issues/1213][shouldn't be put in packages.el]].
+Some annotation workflows are pretty cumbersome in bare pdf-tools. I wrote a package ([[file:local/pdf-easy-annot/][pdf-easy-annot]]) to address some of them. It's in its initial stages at the moment, so I'm developing it locally. I might extract it from here and make it its own thing if it grows large enough.
+Right now it provides:
+- auto-highlight on selection
+- auto-mark markup annotations which have contents (with a squiggly)
 #+begin_src emacs-lisp
 (use-package! pdf-easy-annot
   :load-path "local/pdf-easy-annot"
-  :after pdf-tools
+  :hook (pdf-view-mode . pdf-easy-annot-auto-hl-minor-mode)
+  :hook (pdf-view-mode . pdf-easy-annot-content-markers-minor-mode)
   :config
   (after! pdf-tools
     (map! :map pdf-view-mode-map
-          :n "t" #'pdf-easy-annot-hl-minor-mode)))
+          :ne "t" #'pdf-easy-annot-auto-hl-minor-mode ;; for quick toggling
+          (:prefix ("e" . "pdf-easy-annot")
+           :desc "toggle auto highlighting" :ne "h" #'pdf-easy-annot-auto-hl-minor-mode
+           :desc "toggle content markers" :ne "m" #'pdf-easy-annot-content-markers-minor-mode))
+    ))
 #+end_src
 
-** TODO mark highlight annotations which have contents for easily figuring out which ones have contents
-
 ** TODO display contents through =posframe=
+=pdf-tools= sets image hotspots' =help-echo= message which gets displayed through the echo area.
+It might be possible to change how it's displayed through =show-help-function=.
+
+** TODO Format annotation contents using org syntax, previewing latex fragments
 
 ** TODO Recenter pdf on window size changes
 
