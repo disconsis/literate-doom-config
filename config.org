@@ -723,7 +723,7 @@ Shell programs typically only need to look for documentation through man pages. 
 =pdf-sync-minor-mode= sometimes hangs on mouse events. I'm usually dealing with PDFs more than TeX files, so we might as well remove it.
 #+begin_src emacs-lisp
 (after! pdf-tools
-  (delete! 'pdf-history-minor-mode pdf-tools-enabled-modes))
+  (delete! 'pdf-sync-minor-mode pdf-tools-enabled-modes))
 #+end_src
 
 I rarely view wide PDFs, so horizontal scrolling is not very useful. Instead, using ~h~ & ~l~ can be used for moving between pages is much more "ergonomic".
