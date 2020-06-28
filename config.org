@@ -281,6 +281,32 @@ By default, windows split to the left and top, which is quite unintuitive (maybe
         evil-vsplit-window-right t))
 #+end_src
 
+Sometimes we want to put a new window in the opposite direction. To do this we would have to split the window, move the cursor to the previous window, and then change the buffer to whatever we want.
+Instead, we could use the capitalized versions of the window-split keys to split in the opposite direction.
+#+begin_src emacs-lisp
+(after! evil
+  (defun +evil-window-split-opposite (&optional count file)
+    "Split horizontally in the opposite direction as `evil-window-split' would."
+    (interactive "P<f>")
+    (let ((split-old evil-split-window-below))
+      (setq evil-split-window-below (not split-old))
+      (ignore-errors ;; to make sure the `evil-split-window-below' is reset
+        (evil-window-split count file))
+      (setq evil-split-window-below split-old)))
+
+  (defun +evil-window-vsplit-opposite (&optional count file)
+    "Split vertically in the opposite direction as `evil-window-vsplit' would."
+    (interactive "P<f>")
+    (let ((split-old evil-vsplit-window-right))
+      (setq evil-vsplit-window-right (not split-old))
+      (ignore-errors (evil-window-vsplit count file))
+      (setq evil-vsplit-window-right split-old)))
+
+  (map! :leader
+        "w S" #'+evil-window-split-opposite
+        "w V" #'+evil-window-vsplit-opposite))
+#+end_src
+
 I almost always /know/ which evil state I'm in, otherwise a quick ~C-[~ (~ESC~) sets that right. So I don't really care for all the indicators scattered around the UI. The most basic (c.f. ugly) of these is the one in the echo area, so let's at least turn that off.
 #+begin_src emacs-lisp
 (after! evil
