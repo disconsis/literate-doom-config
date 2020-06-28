@@ -10,6 +10,19 @@ Enable lexical binding for performance
 * Ideas
 Improvement ideas go here.
 
+** Start displaying system information in the modeline if fullscreened
+If things like battery information and current date,time were displayed automatically whenever I fullscreened the window (and turned off afterwards) I would probably fullscreen emacs a lot more.
+
+Things that would be nice to be displayed ($\leq$ everything on the bar):
+- battery
+- date, time
+- brightness
+- ram, cpu usage
+
+The hard part here is detecting when the frame is fullscreened due to the fact that I'm using a tiling window manager. The information resulting from =(frame-parameter nil 'fullscreen)= is thus not accurate.
+** TODO Better key for =+popup/toggle= and friends
+** TODO Easier following of compilation buffer, and allow switching to it (maybe with ~, p M~) since it doesn't show up with ~SPC b b~
+
 * Utility functions/packages
 Making theme customizations requires duplicating the code in two places: on startup and in =doom-load-theme-hook= (to survive theme changes). A simple utility macro prevents manual duplication.
 #+begin_src emacs-lisp
