@@ -251,10 +251,17 @@ For now I've resorted to just spamming it in the echo area whenever possible (us
 
 We hook the echoing onto the loading of the workspace module. This has the dual benefit of
 1. reducing startup time
- 2. not polluting the echo area till the workspace module is first used
+2. not polluting the echo area till the workspace module is first used
 
 #+begin_src emacs-lisp
 (after-module! (:ui workspaces "autoload/workspaces.el")
+  ;; Wait a while after a command before displaying the workspaces.
+  ;; We can always hit ~SPC TAB TAB~ if in a hurry.
+  (setq persistent-echo-delay 5)
+
+  ;; Since workspaces can never *externally*, there's no need to ever refresh.
+  (setq persistent-echo-refresh-delay 1000)
+
   (persistent-echo-enable #'+workspace--tabline))
 #+end_src
 
