@@ -389,6 +389,13 @@ Doom sets ~[ e~ and ~] e~ to move between errors. I'm used to using them to /exc
         :n "] e" #'move-text-line-down))
 #+end_src
 
+** Org-mode keys
+=evil-org='s keys for opening lines above/below don't manage list numberings by default.
+#+begin_src emacs-lisp
+(after! evil-org
+  (pushnew! evil-org-special-o/O 'item))
+#+end_src
+
 * Org-mode
 org-mode forms the base of this config, so some quick improvements are sorely needed.
 
