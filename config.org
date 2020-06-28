@@ -333,6 +333,21 @@ The details in =dired= create a lot of visual clutter and it's rarely needed, so
   (add-hook 'dired-mode-hook #'dired-hide-details-mode))
 #+end_src
 
+Resizing is quite cumbersome in Doom (and also in default Emacs) since you have to repeat the keys over and over again for each increment or decrement. Doom implements a  hydra for this, but it doesn't bind any keys to it for some reason. We'll do that ourselves.
+This has a major downside in the fact that windows /flicker/ a lot when using its operations.
+#+begin_src emacs-lisp
+(map! :when (featurep! :ui hydra)
+      :leader
+      :n "w ." #'+hydra/window-nav/body)
+#+end_src
+
+We can allow window-move commands to wrap around, which is pretty nifty when there are a lot of windows.
+This is configured through a variable in the =windmove= package (which =evil= uses).
+#+begin_src emacs-lisp
+(after! windmove
+  (setq windmove-wrap-around t))
+#+end_src
+
 ** Unimpaired-style keys
 I'm quite used to turning search highlights on and off with ~[ h~ and ~] h~. In Doom these move between headings in org-mode, but the same action can also be done with ~C-j~ and ~C-k~, so we can safely remap them.
 #+begin_src emacs-lisp
