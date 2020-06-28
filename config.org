@@ -134,6 +134,7 @@ The defaults for all of these are pretty good (the last one defaulting to the de
 - doom-sourcerer
 - doom-nord
 - doom-moonlight
+- doom-spacegrey
 
 Aside from those:
 - =tao-yang= is an excellent monochrome light theme, but it's too bright to use in the evenings (insert light-theme joke...)
@@ -164,6 +165,15 @@ We can change them slightly while maintaining the monochrome /a e s t h e t i c/
      (set-face-attribute 'git-gutter-fr:added nil :foreground color))))
 #+end_src
 
+The plan9 light theme looks like leuven and being so yellow, is easy on the eyes too. However, for some reason, it decided to set its own font for =org-level-1= and =org-document-title=. The latter is already taken care of by our custom font, but we'll remove the former setting.
+#+begin_src emacs-lisp
+(modify-theme!
+ (when (memq 'plan9 custom-enabled-themes)
+   (set-face-attribute 'org-level-1 nil :family 'unspecified)))
+#+end_src
+
+plan9 also makes the modeline also look god-awful.
+
 *** Matching parentheses
 =show-smartparens-mode= is responsible for highlighting the matching parenthesis. For most themes this highlight is too subtle to notice. One way to fix this is to draw boxes around the matching parenthesis.
 Another way is described by [[https://with-emacs.com/posts/ui-hacks/show-matching-lines-when-parentheses-go-off-screen/][this with-emacs post]] which uses =blink-matching-open= to display an overlay showing the matching open parenthesis. The code /looks/ a little bit messy, which is why I haven't experimented with it yet.
@@ -187,7 +197,7 @@ Changing the theme with =counsel-load-theme= has one downside - you can't see th
 However, some themes like =solaire-swap-bg-theme= are always loaded (at least in my setup), but these aen't something I want to know about each time I try to change themes. For this we set a list of ignores.
 #+begin_src emacs-lisp
 (defvar +counsel-load-theme-ignore-prefixes '("solaire-")
-  "Prefix of themes to ignore when displaying the current theme with `my/counsel-load-theme-showing-current'.")
+  "Prefix of themes to ignore when displaying the current theme with `+counsel-load-theme'.")
 #+end_src
 
 We'll make a slight modification to =counsel-load-theme= to display the current theme.
