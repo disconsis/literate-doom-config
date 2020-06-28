@@ -60,3 +60,8 @@
 (package! anti-zenburn-theme) ;; grey, but less
 (package! plan9-theme)        ;; it's hiiiiigh noon
 (package! flatui-theme)       ;; high-constrast, slightly bluish
+
+
+;; research
+(package! z3-mode
+  :recipe (:host github :repo "disconsis/z3-mode"))

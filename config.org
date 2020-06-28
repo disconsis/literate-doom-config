@@ -738,6 +738,16 @@ Shell programs typically only need to look for documentation through man pages. 
     :documentation '(my/woman-non-interactive)))
 #+end_src
 
+** z3
+=z3-mode= provides some basic interaction with =z3=, but it's really barebones.
+#+begin_src emacs-lisp
+(use-package! z3-mode
+  :config
+  (map! :map z3-mode-map
+        :localleader
+        :nv "," #'z3-execute-region))
+#+end_src
+
 * PDF
 =pdf-sync-minor-mode= sometimes hangs on mouse events. I'm usually dealing with PDFs more than TeX files, so we might as well remove it.
 #+begin_src emacs-lisp
