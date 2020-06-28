@@ -406,6 +406,14 @@ Doom sets ~[ e~ and ~] e~ to move between errors. I'm used to using them to /exc
   (pushnew! evil-org-special-o/O 'item))
 #+end_src
 
+** Surround
+=evil-embrace= provides more powerful "surround" commands (like adding/deleting surrounding org blocks).
+Since I'm not comfortable with the keys yet, I'll turn on the helpful (but slightly annoying) help popup.
+#+begin_src emacs-lisp
+(after! evil-embrace
+  (setq evil-embrace-show-help-p t))
+#+end_src
+
 * Org-mode
 org-mode forms the base of this config, so some quick improvements are sorely needed.
 
