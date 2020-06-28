@@ -477,6 +477,40 @@ We can also display bullets as checkmarks for todo headings.
   (setq org-superstar-special-todo-items t))
 #+end_src
 
+Links being variable pitch screws up the alignment in org-mode tables. A proper fix would probably make the =org-table= face =:extend t=, or use the internals of =mixed-pitch-mode=.
+For now, we'll just make links fixed-pitch and save ourselves the trouble.
+*************** TODO Extend =org-table= face to make links fixed-pitch _only_ in tables
+*************** END
+#+begin_src emacs-lisp
+(after! mixed-pitch
+  (pushnew! mixed-pitch-fixed-pitch-faces 'org-link))
+#+end_src
+
+Some themes apply a foreground color to =org-hide=, which sort of defeats the purpose of it - for instance, it makes leading stars somewhat visible even if =org-hide-leading-stars= is set. Due to =solaire-mode= changing the default background for some buffers, we have to set =solaire-org-hide-face= in addition to the standard =org-hide=.
+#+begin_src emacs-lisp
+(after! org
+  (modify-theme!
+   (set-face-foreground 'org-hide (face-background 'default))
+   (set-face-attribute 'solaire-org-hide-face nil
+                       :foreground (face-background 'solaire-default-face))
+   ))
+#+end_src
+
+Some themes apply an underline to the ellipsis, perhaps in the hopes of making it more visible. This isn't required in our case as we use a special character for =org-ellipsis=, and creates noise.
+#+begin_src emacs-lisp
+(after! org
+  (modify-theme!
+   (set-face-underline 'org-ellipsis nil)))
+#+end_src
+
+Some themes make the block background extend to the end of the line, some don't; some make the beginning and ending lines same as the block background, some don't. I always prefer the former (in each case), so we'll make this a little bit more consistent by forcing this behaviour.
+#+begin_src emacs-lisp
+(after! org
+  (modify-theme!
+   (dolist (face '(org-block org-block-begin-line org-block-end-line))
+     (set-face-attribute face nil :background (face-background 'org-block) :extend t))))
+#+end_src
+
 ** LaTeX
 =org-fragtog= allows automatically toggling fragments whenever the cursor is on them.
 #+begin_src emacs-lisp
