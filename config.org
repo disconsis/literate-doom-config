@@ -759,6 +759,17 @@ The default scrollback size of 1000 is really small and takes away the advantage
   (setq vterm-max-scrollback 50000))
 #+end_src
 
+* Force-quit
+Sometimes you just hafta gently nudge emacs to commit sudoku with a =kill -9=.
+#+begin_src emacs-lisp
+(defun +force-kill-emacs ()
+  "Force-kill emacs - for when nothing else works."
+  (interactive)
+  (shell-command (format "kill -9 %s" (emacs-pid))))
+
+(map! :leader "q F" #'+force-kill-emacs)
+#+end_src
+
 * Projectile
 ** Running make
 Surprisingly, Doom provides =+make/run= and =+make/run-last= to run make commands in a project (no more switching to the right directory), but does not bind them to any keys. Well, the ~<leader> p~ prefix is right there, and ~m~ isn't bound to anything (atleast right now).
