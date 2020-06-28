@@ -1,6 +1,7 @@
 #+TITLE: Literate Doom Config
 #+AUTHOR: Ketan Kanishka (ketan.kanishka@nyu.edu)
 #+PROPERTY: header-args :results none
+#+STARTUP: fold
 
 Enable lexical binding for performance
 #+BEGIN_SRC emacs-lisp
