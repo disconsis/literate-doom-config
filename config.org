@@ -750,3 +750,12 @@ It's irritating to have to copy and paste a filename from a file just to open it
 (map! :map doom-leader-file-map
       "." #'find-file-at-point)
 #+end_src
+
+* Shell
+** vterm
+The default scrollback size of 1000 is really small and takes away the advantages of having a searchable history. We'll turn it waaay up.
+#+begin_src emacs-lisp
+(after! vterm
+  (setq vterm-max-scrollback 50000))
+#+end_src
+
