@@ -71,6 +71,15 @@ Since they don't provide a feature and the directory structure is not completely
      ,@body))
 #+end_src
 
+On a lot of occasions, I want to run a command automatically after saving a buffer. This is generally for checking script output, running tests etc. Doing this by hand (creating a function and adding it to =after-save-hook=) is tedious for these one-off jobs, so we'll write a utility function instead. Note that this should almost always be buffer-local.
+#+begin_src emacs-lisp
+(defmacro +on-save (body)
+  "Run form whenever the current buffer is saved."
+  `(add-hook! 'after-save-hook :append :local ,@body))
+#+end_src
+
+We still need to write some lisp to make this happen, so it's not accessible in a completely ad-hoc manner yet; but it should allow for more functions which activate on-save handlers in specific modes.
+
 * Look
 ** Font
 Doom uses a number of font variables for customizing different things.
