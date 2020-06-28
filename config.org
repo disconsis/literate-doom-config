@@ -759,3 +759,13 @@ The default scrollback size of 1000 is really small and takes away the advantage
   (setq vterm-max-scrollback 50000))
 #+end_src
 
+* Projectile
+** Running make
+Surprisingly, Doom provides =+make/run= and =+make/run-last= to run make commands in a project (no more switching to the right directory), but does not bind them to any keys. Well, the ~<leader> p~ prefix is right there, and ~m~ isn't bound to anything (atleast right now).
+#+begin_src emacs-lisp
+(when (featurep! :tools make)
+  (map! :leader
+        "p m" #'+make/run
+        "p M" #'+make/run-last))
+#+end_src
+
