@@ -555,6 +555,12 @@ Some themes make the block background extend to the end of the line, some don't;
   :hook (org-mode . org-fragtog-mode))
 #+end_src
 
+By default, latex snippets are not highlighted unless put in a (src/export/latex) block; however putting them in a block prevents them being previewed (through =org-latex-preview=). The solution is to set the following variable.
+#+begin_src emacs-lisp
+(after! org
+  (setq org-highlight-latex-and-related '(native)))
+#+end_src
+
 ** Checkers
 Text-based modes /should/ have both spelling and grammar checks. For technical writing however, I find I spend my time teaching the spell checker more than anything else. A better dictionary than =aspell= is obviously required.
 *************** TODO Find a better dictionary for technical writing
