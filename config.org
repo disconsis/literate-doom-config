@@ -135,15 +135,15 @@ We still need to write some lisp to make this happen, so it's not accessible in 
 * Look
 ** Font
 Doom uses a number of font variables for customizing different things.
-=doom-font= is the standard font. Since emacs 28, ligatures are composed automatically, so we use a font which has those. Some good options are:
+=doom-font= is the standard font. Since emacs 28, ligatures are composed automatically by Doom, so we use a font which has those. Some good options are:
 - JetBrains Mono
 - Iosevka Term
 - Pragmata Pro
 - Monoid
 - Overpass Mono
+- Victor Mono
 
 There's a few other non-ligature retro fonts which are also nice:
-- Victor Mono
 - Curie
 
 Some quirky unique fonts:
