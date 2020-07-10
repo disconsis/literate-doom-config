@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: django block
+# key: block
+# condition: (string= web-mode-engine "django")
+# --
+{% block ${1:block-name} %}
+    $0
+{% endblock %}
