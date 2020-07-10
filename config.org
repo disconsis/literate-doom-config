@@ -44,7 +44,8 @@ It's caused by the bg of org-block showing up in those places
 Opening up a new browser window if neccessary
 
 ** TODO Fix ~y s s "~ (and other surrounds) to /not/ put the last surround on the next line
-I think this only happens in =visual-line-mode=
+I think this only happens in =visual-line-mode= - it does.
+It also screws up ~gcj~.
 
 ** TODO pdf-easy-annot-content-marker-minor-mode doesn't work
 The ergonomics with pdf-easy-annot-auto-hl-minor-mode are especially bad since you can't activate an annotation while auto-hl is activated
@@ -79,6 +80,8 @@ Without either half-ass zooming or closing other windows
 ** TODO Remove mail from display-time-mode
 
 ** TODO prettify-symbols-mode is not "working" in some areas of the buffer.
+
+** It would be nice to get minimap working - esp. for org-mode files
 
 * Utility functions/packages
 Making theme customizations requires duplicating the code in two places: on startup and in =doom-load-theme-hook= (to survive theme changes). A simple utility macro prevents manual duplication.
