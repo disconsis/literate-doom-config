@@ -227,7 +227,7 @@ The plan9 light theme looks like leuven and being so yellow, is easy on the eyes
 plan9 also makes the modeline also look god-awful.
 
 *** Matching parentheses
-=show-smartparens-mode= is responsible for highlighting the matching parenthesis. For most themes this highlight is too subtle to notice. One way to fix this is to draw boxes around the matching parenthesis.
+=show-smartparens-mode= is responsible for highlighting the matching parenthesis. For most themes this highlight is too subtle to notice. One way to fix this is to draw underlines around the matching parenthesis.
 Another way is described by [[https://with-emacs.com/posts/ui-hacks/show-matching-lines-when-parentheses-go-off-screen/][this with-emacs post]] which uses =blink-matching-open= to display an overlay showing the matching open parenthesis. The code /looks/ a little bit messy, which is why I haven't experimented with it yet.
 
 For now, we'll just use =show-smartparens-mode= everywhere.
@@ -238,10 +238,10 @@ For now, we'll just use =show-smartparens-mode= everywhere.
 (add-hook! '(prog-mode-hook org-mode-hook) #'show-smartparens-mode)
 #+end_src
 
-And then let's make the boxes.
+And then let's make it underlined.
 #+begin_src emacs-lisp
 (after! smartparens
-  (modify-theme! (set-face-attribute 'sp-show-pair-match-face nil :box t)))
+  (modify-theme! (set-face-attribute 'sp-show-pair-match-face nil :underline t)))
 #+end_src
 
 *** Changing themes
