@@ -195,7 +195,7 @@ Aside from those:
   - you might like for it to customize heights (especially for org-mode), but as of now it sets such an impossibly tiny size for the modeline that it becomes unusable
 
 #+BEGIN_SRC emacs-lisp
-(setq doom-theme 'doom-moonlight)
+(setq doom-theme 'doom-spacegrey)
 #+END_SRC
 
 We'll make some changes to tao-yin to fix the problems described earlier.
