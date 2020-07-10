@@ -25,6 +25,58 @@ The hard part here is detecting when the frame is fullscreened due to the fact t
 ** TODO Easier following of compilation buffer, and allow switching to it (maybe with ~, p M~) since it doesn't show up with ~SPC b b~
 ** Remap '-' to act like ~q~ in popup buffers, or at least the help popups
 Works like vim-vinegar as in it goes to the previous help (vs directory).
+** TODO Add company faces to =mixed-pitch-fixed-pitch-faces=
+** TODO Timer to blacklist me from editing config files
+Much like pluck.sh, but harder to implement in a non-bypassable way.
+Maybe use the remote evaluations to time myself out.
+
+** TODO Capture template to add ideas here
+** TODO Stop pdf from moving when editing latex buffers
+Is it moving around due to org-noter advices?
+It also does that when moving b/w headlines.
+** TODO LaTeX: keybind to insert environment in org-mode
+Maybe through an org-tempo template.
+** TODO pdf-easy-annot: ability to /copy/ the text of a markup annotation
+** TODO Fix different bg latex fragments in org-mode
+It's caused by the bg of org-block showing up in those places
+** TODO pdf: make ~C-o~, ~C-i~ work to swap around the jump list (as in vim, and everywhere else)
+** It would be awesome if links would always open up on the same workspace
+Opening up a new browser window if neccessary
+
+** TODO Fix ~y s s "~ (and other surrounds) to /not/ put the last surround on the next line
+I think this only happens in =visual-line-mode=
+
+** TODO pdf-easy-annot-content-marker-minor-mode doesn't work
+The ergonomics with pdf-easy-annot-auto-hl-minor-mode are especially bad since you can't activate an annotation while auto-hl is activated
+** TODO Turn off evil-mode in vterm
+Turn off by default and provide an easy insert-mode toggle (maybe like evil-escape?)
+
+** TODO add hook for auto-revert-mode in dired buffers
+
+** Monospace all-the-icons to maintain alignment in various modes (like all-the-icons-dired)
+These issues discuss ways to do this:
+- https://github.com/domtronn/all-the-icons.el/issues/82
+  - [[https://github.com/domtronn/all-the-icons.el/issues/82#issuecomment-516511749][This code]] works okay last time I tested it, but needs to cache its results
+- https://github.com/domtronn/all-the-icons.el/issues/77
+  - Using =:height= worked for [[https://github.com/domtronn/all-the-icons.el/issues/77#issuecomment-319219966][this guy]]
+  - [[https://github.com/domtronn/all-the-icons.el/issues/77#issuecomment-573872338][This guy]] suggests using the [[https://github.com/cpitclaudel/monospacifier][monospacerify]] tool, which might just work.
+
+** Actual window zoom with https://github.com/emacsorphanage/zoom-window
+Without either half-ass zooming or closing other windows
+
+** TODO Make company-org-roam completions actually show up
+
+** TODO Set company-complete-...whatever to C-n instead of RET
+
+** TODO Stop dap-dart loading automatically
+
+** TODO pdf-easy-annot: copy text under annotation
+
+** TODO Spacemacs-like "dedicated window" functionality
+
+** TODO Copy find-file-ace-window from scratch buffer
+
+** TODO Remove mail from display-time-mode
 
 * Utility functions/packages
 Making theme customizations requires duplicating the code in two places: on startup and in =doom-load-theme-hook= (to survive theme changes). A simple utility macro prevents manual duplication.
