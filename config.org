@@ -78,6 +78,8 @@ Without either half-ass zooming or closing other windows
 
 ** TODO Remove mail from display-time-mode
 
+** TODO prettify-symbols-mode is not "working" in some areas of the buffer.
+
 * Utility functions/packages
 Making theme customizations requires duplicating the code in two places: on startup and in =doom-load-theme-hook= (to survive theme changes). A simple utility macro prevents manual duplication.
 #+begin_src emacs-lisp
