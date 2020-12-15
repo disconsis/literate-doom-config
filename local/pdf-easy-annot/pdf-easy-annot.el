@@ -51,6 +51,7 @@
 (require 'pdf-annot)
 (require 'dash)
 (require 's)
+(require 'cl)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -81,7 +82,7 @@ Set to `nil' to disable.")
   "Color to use for future highlights.
 Use the defaults from `pdf-annot-default-annotation-properties' at the start.")
 
-(defvar pdf-easy-annot-color-button-indicator ""
+(defvar pdf-easy-annot-color-button-indicator " "
   "String used for the color buttons on the modeline.")
 
 (defun pdf-easy-annot--auto-hl-color-make-button (color)
@@ -117,11 +118,11 @@ mouse-3: remove this button" color)
 Uses the foreground color which will be used for the next highlighting.
 TODO check if the indicator is displayable, otherwise use a default ('HL' ?)
 TODO Add a button for the default color"
-  (s-join " "
+  (s-join ""
    (-snoc
     (-map #'pdf-easy-annot--auto-hl-color-make-button
           (-union pdf-easy-annot-auto-hl-button-colors pdf-annot-color-history))
-    "|"
+    " | "
     (propertize pdf-easy-annot-auto-hl-mode-line-indicator
                 'font-lock-face `(:foreground ,pdf-easy-annot--auto-hl-active-color)
                 'help-echo "mouse-1: disable auto-hl minor mode"
@@ -150,8 +151,8 @@ TODO Add a button for the default color"
   (interactive)
   (advice-add #'pdf-view-mouse-set-region :after #'pdf-easy-annot/add-hl-advice)
   (when pdf-easy-annot-auto-hl-mode-line-indicator
-    ;; Don't need to remove from mode-line-misc-info since we use `pushnew' to add it.
-    (pushnew '(pdf-easy-annot-auto-hl-minor-mode
+    ;; Don't need to remove from mode-line-misc-info since we use `cl-pushnew' to add it.
+    (cl-pushnew '(pdf-easy-annot-auto-hl-minor-mode
                (:eval (pdf-easy-annot/auto-hl-mode-line-info)))
              mode-line-misc-info)))
 
@@ -229,8 +230,8 @@ TODO Make sure this doesn't start a recursive modification chain."
 
 
 (defun pdf-easy-annot/enable-manage-markers ()
-  (pushnew #'pdf-easy-annot/manage-markers-on-modifications
-           pdf-annot-modified-functions))
+  (cl-pushnew #'pdf-easy-annot/manage-markers-on-modifications
+              pdf-annot-modified-functions))
 
 
 ;;;###autoload

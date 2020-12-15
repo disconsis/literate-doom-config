@@ -29,7 +29,6 @@ Works like vim-vinegar as in it goes to the previous help (vs directory).
 ** TODO Timer to blacklist me from editing config files
 Much like pluck.sh, but harder to implement in a non-bypassable way.
 Maybe use the remote evaluations to time myself out.
-
 ** TODO Capture template to add ideas here
 ** TODO Stop pdf from moving when editing latex buffers
 Is it moving around due to org-noter advices?
@@ -62,14 +61,9 @@ These issues discuss ways to do this:
   - Using =:height= worked for [[https://github.com/domtronn/all-the-icons.el/issues/77#issuecomment-319219966][this guy]]
   - [[https://github.com/domtronn/all-the-icons.el/issues/77#issuecomment-573872338][This guy]] suggests using the [[https://github.com/cpitclaudel/monospacifier][monospacerify]] tool, which might just work.
 
-** Actual window zoom with https://github.com/emacsorphanage/zoom-window
-Without either half-ass zooming or closing other windows
-
 ** TODO Make company-org-roam completions actually show up
 
 ** TODO Set company-complete-...whatever to C-n instead of RET
-
-** TODO Stop dap-dart loading automatically
 
 ** TODO pdf-easy-annot: copy text under annotation
 
@@ -82,6 +76,20 @@ Without either half-ass zooming or closing other windows
 ** TODO prettify-symbols-mode is not "working" in some areas of the buffer.
 
 ** It would be nice to get minimap working - esp. for org-mode files
+
+** Hook the pretty-org-table code from [[https://www.reddit.com/r/emacs/comments/d3a8or/pretty_org_tables_in_the_buffer_chapter_2_it/][reddit]] into something like =org-fragtog=
+
+** TODO Use =custom-theme-set-faces!= instead of (or in addition to) =modify-theme!=
+This is because if you modify a theme with =modify-theme!= but later try to change it, the additions made are not removed since they're not part of the theme itself.
+This is most evident when using magit with a dark theme /after/ having =doom-flatwhite= enabled for a while.
+#+begin_src emacs-lisp
+(find-file doom-private-dir)
+(load-theme 'doom-flatwhite t)
+(magit-log-all)
+(load-theme 'doom-tomorrow-night t)
+#+end_src
+
+In the same vein, =doom-darken= and =doom-lighten= can be used for slightly darkening lightening colors.
 
 * Utility functions/packages
 Making theme customizations requires duplicating the code in two places: on startup and in =doom-load-theme-hook= (to survive theme changes). A simple utility macro prevents manual duplication.
@@ -137,6 +145,15 @@ On a lot of occasions, I want to run a command automatically after saving a buff
 
 We still need to write some lisp to make this happen, so it's not accessible in a completely ad-hoc manner yet; but it should allow for more functions which activate on-save handlers in specific modes.
 
+
+Sometimes I intentionally capture logs to a file *with* ansi escapes, with the intent to view them in color. The following function makes the buffer colored according to the ansi codes.
+#+begin_src emacs-lisp
+(defun ansify-buffer ()
+  (interactive)
+  (require 'ansi-color)
+  (ansi-color-apply-on-region (point-min) (point-max)))
+#+end_src
+
 * Look
 ** Font
 Doom uses a number of font variables for customizing different things.
@@ -150,13 +167,25 @@ Doom uses a number of font variables for customizing different things.
 
 There's a few other non-ligature retro fonts which are also nice:
 - Curie
+- Camingo Code
 
 Some quirky unique fonts:
 - Hurmit
+- Sudo
 
 #+BEGIN_SRC emacs-lisp
 (setq doom-font (font-spec :family "Pragmata Pro" :size 15))
+;; (setq doom-font (font-spec :family "Sudo" :size 20))
+;; (setq doom-font (font-spec :family "Iosevka Term" :size 15))
+;; (setq doom-font (font-spec :family "OverpassMono Nerd Font" :size 15))
+;; (setq doom-font (font-spec :family "Camingo Code" :size 15))
+;; (setq doom-font (font-spec :family "JetBrains Mono" :size 15))
 #+END_SRC
+
+Emacs' font displays start to get really bad for my usual selection of monospace fonts in =doom-big-font-mode=. The only font that looks good (better than its normal-sized version, even) is Victor Mono
+#+begin_src emacs-lisp
+(setq doom-big-font (font-spec :family "Victor Mono" :size 20))
+#+end_src
 
 
 Next comes the variable-pitch font. This is mostly used for text-based modes like org.
@@ -167,11 +196,16 @@ I'll list good options anyway for posterity:
 - Aleo
 - Helvetica Neue
 - ET Book / ET Bembo
+- Merriweather
+- Arvo
+- Raleway
 
 NOTE: Earlier, setting =doom-variable-pitch-font= made =variable-pitch-mode= not use it, for some reason. This seems to not be the case anymore, but I have no idea why.
 
 #+begin_src emacs-lisp
-(setq doom-variable-pitch-font (font-spec :family "Aleo" :weight 'light))
+;; (setq doom-variable-pitch-font (font-spec :family "Aleo" :weight 'light))
+(setq doom-variable-pitch-font (font-spec :family "Arvo"))
+;; (set-face-attribute 'variable-pitch nil :font doom-variable-pitch-font)
 #+end_src
 
 Other font settings are:
@@ -184,6 +218,11 @@ The defaults for all of these are pretty good (the last one defaulting to the de
 *** TODO Add =doom-unicode-font= as fallback
 
 ** Theme
+This is the theme used on startup.
+#+begin_src emacs-lisp
+(setq doom-theme 'doom-tomorrow-night)
+#+end_src
+
 =doom-themes= provides a number of excellent themes like:
 - doom-one
 - doom-tomorrow-night
@@ -192,16 +231,12 @@ The defaults for all of these are pretty good (the last one defaulting to the de
 - doom-nord
 - doom-moonlight
 - doom-spacegrey
+- doom-flatwhite [light theme]
 
 Aside from those:
-- =tao-yang= is an excellent monochrome light theme, but it's too bright to use in the evenings (insert light-theme joke...)
+- tao-yang is an excellent monochrome light theme, but it's too bright to use in the evenings (insert light-theme joke...)
 - tao-yin is a similarly good monochrome dark theme, but needs some configuration
   - by default, it uses sepia instead of grayscale, which doesn't look as good in my opinion
-  - you might like for it to customize heights (especially for org-mode), but as of now it sets such an impossibly tiny size for the modeline that it becomes unusable
-
-#+BEGIN_SRC emacs-lisp
-(setq doom-theme 'doom-spacegrey)
-#+END_SRC
 
 We'll make some changes to tao-yin to fix the problems described earlier.
 #+begin_src emacs-lisp
@@ -215,6 +250,7 @@ We can change them slightly while maintaining the monochrome /a e s t h e t i c/
 #+begin_src emacs-lisp
 (after! tao-theme
   (modify-theme!
+   (require 'dash)
    (when-let* ((theme (car (-intersection '(tao-yin tao-yang) custom-enabled-themes)))
                (theme-minus-tao (nth 1 (s-split-up-to "-" (symbol-name theme) 1)))
                (palette (intern (concat "tao-theme-" theme-minus-tao "-palette")))
@@ -230,6 +266,46 @@ The plan9 light theme looks like leuven and being so yellow, is easy on the eyes
 #+end_src
 
 plan9 also makes the modeline also look god-awful.
+
+The doom-flatwhite theme removes any highlighting from branch names in magit, so they tend to blend together with commit messages when viewing the log. We'll add some of the theme's typical background coloring to them to fix this.
+#+begin_src emacs-lisp
+(after! magit
+ (modify-theme!
+  (when (memq 'doom-flatwhite custom-enabled-themes)
+    (dolist (face '(magit-branch-local
+                    magit-branch-current
+                    magit-branch-upstream
+                    magit-branch-remote
+                    magit-branch-remote-head))
+      (set-face-attribute face nil
+                          :background
+                          (face-attribute 'font-lock-string-face :background))))))
+#+end_src
+
+Some of the base-16 themes are pretty nifty - e.g. =base16-atelier-savanna= and =base16-atelier-savanna-light=.
+Both of these have terrible active modelines and great inactive modelines. This is mostly due to the horrible background color on the active modeline, which is also used for visual selections (and a coupole other places). We'll fix the worst offenders.
+We'll also add a subtle background coloring to code blocks in org mode to distinguish them.
+*************** TODO Wait for some faces to be loaded before we change them
+I want to set some faces, but these might not be loaded yet. However, we also can't just wait for them to be loaded to do this
+Right now I just check if they're loaded (with =facep=).
+*************** END
+
+#+begin_src emacs-lisp
+(modify-theme!
+ (require 'dash)
+ (when-let* ((theme (car (-intersection '(base16-atelier-savanna base16-atelier-savanna-light)
+                                        custom-enabled-themes)))
+             (org-block-bg (if (eq theme 'base16-atelier-savanna-light) "#e4ede7" "#1D231F")))
+
+   (set-face-background 'mode-line (face-background 'mode-line-inactive))
+   (set-face-background 'secondary-selection (face-background 'hl-line))
+   (set-face-background 'region (face-background 'hl-line))
+   (when (facep 'company-tooltip-selection) (set-face-background 'company-tooltip-selection "grey80"))
+   ;; distinguish org blocks
+   (dolist (face '(org-block-begin-line org-block-end-line))
+     (when (facep face) (set-face-background face (face-background 'hl-line))))
+   (when (facep 'org-block) (set-face-background 'org-block org-block-bg))))
+#+end_src
 
 *** Matching parentheses
 =show-smartparens-mode= is responsible for highlighting the matching parenthesis. For most themes this highlight is too subtle to notice. One way to fix this is to draw underlines around the matching parenthesis.
@@ -289,14 +365,27 @@ NOTE: =:desc= keys seem to only take effect with /prefixes/ (and not /maps/) wit
 ** Pretty symbols
 The prettified symbols for quotes are pretty lackluster. We'll use slightly bigger unicode characters to make them stand out.
 #+begin_src emacs-lisp
-(when (featurep! :ui pretty-code)
-  (plist-put! +pretty-code-symbols :quote "" :quote_end ""))
+(when (featurep! :ui ligatures +extra)
+  (plist-put! +ligatures-extra-symbols :quote "" :quote_end ""))
+#+end_src
+
+And let's do the same for EXAMPLE blocks.
+#+begin_src emacs-lisp
+(when (featurep! :ui ligatures +extra)
+  (plist-put! +ligatures-extra-symbols
+              :example ""
+              :example_end "<")
+  (set-ligatures! 'org-mode
+    :example "#+BEGIN_EXAMPLE"
+    :example_end "#+END_EXAMPLE"
+    :example "#+begin_example"
+    :example_end "#+end_example"))
 #+end_src
 
 All modes deserve ligatures!
 #+begin_src emacs-lisp
-(when (featurep! :ui pretty-code)
-  (setq +prog-ligatures-modes t))
+(when (featurep! :ui ligatures)
+  (setq +ligatures-in-modes t))
 #+end_src
 
 ** Banner
@@ -304,7 +393,7 @@ The startup banner image is customizable, and the default text-based banner coul
 [[https://github.com/search?q=setq+%2Bdoom-dashboard-banner-file&type=Code][Searching github for banners]] yielded 4 pages of results - most of them slight variations on the same image. I collected some of the more interesting ones in [[file:banners/][banners/]].
 #+begin_src emacs-lisp
 (setq +doom-dashboard-banner-dir (expand-file-name "banners" doom-private-dir)
-      +doom-dashboard-banner-file "ue.png")
+      +doom-dashboard-banner-file "doom-white.png")
 #+end_src
 
 ** Startup color
@@ -322,10 +411,67 @@ emacs.background: #000000
 
 I might end up setting an(other) advice around =counsel-load-theme= which changes this line to use the default background color.
 
+** Modeline
+The modeline has quite a lot of features I don't need. We'll turn off some of those first.
+
+I find I have no use at all for the size of a buffer.
+#+begin_src emacs-lisp
+(when (featurep! :ui modeline)
+  (remove-hook 'doom-modeline-mode-hook #'size-indication-mode))
+#+end_src
+
+
+Who needs the buffer encoding? This /might/ be useful when the encoding is non-standard, but since it almost /always/ "LF UTF-8" it reduces its utility significantly.
+A vim package I used to use had a configurable "blacklist" for buffer encodings which it considered "normal", and wouldn't display. Something like that would make this information worth having on the modeline. As of now, this information isn't important enough for me to write this code.
+#+begin_src emacs-lisp
+(setq doom-modeline-buffer-encoding nil)
+#+end_src
+
+*************** TODO Turn off modal indicators
+The icons are only good as eye-candy, since it's impossible to tell your mode just from a color (which is also dependent on the color scheme if I'm not mistaken). The text indicators do a good job of "indicating", but look terrible and aren't configurable. Most importantly, I find I just don't /need/ the indicators.
+However, turning it off doesn't seem to just be a matter of setting a variable. I would have to define my own modeline (with =doom-modeline-def-modeline=), and it's just not worth it for me.
+*************** END
+
+
+On the other hand, there are some really useful features that are turned off in the modeline. We'll enable those now.
+
+First off, why *not* have Github notifications locally?
+*************** TODO Set up github user and password
+This definitely needs my  Github credentials to work. Hopefully it can work with my SSH key, though I'm doubtful. I'll need to set up a secrets file and everything for this.
+After that's done, =doom-modeline-github= can be enabled. No use turning it on till then.
+*************** END
+
+Next, even though we're displaying the perspective (read - "workspace") in the [[*Workspaces][echo area]], it's nice to have it in the modeline too.
+#+begin_src emacs-lisp
+(setq doom-modeline-persp-name t)
+#+end_src
+
+The modeline looks much better to me without any bold or italic faces.
+#+begin_src emacs-lisp
+(modify-theme!
+ (require 's)
+ (require 'subr-x)
+ (require 'dash)
+ (thread-last (face-list)
+   (-filter (lambda (face) (s-starts-with? "doom-modeline-" (symbol-name face))))
+   (-map (lambda (face)
+           (set-face-bold face nil)
+           (set-face-italic face nil)))))
+#+end_src
+
+** Tooltips
+Tooltips look a lot cleaner than spamming messages in the echo area, and don't require looking away as much.
+This is useful in a variety of unexpected places (like PDFs, for showing annotation contents).
+#+begin_src emacs-lisp
+(tooltip-mode)
+#+end_src
+
 * Workspaces
 Since the workspace list disappears so quickly, I often forget about the presence of other workspaces. This detracts from the usefulness of =persp-mode= (or =:ui workspaces=), and I end up destroying the separation of projects.
 For now I've resorted to just spamming it in the echo area whenever possible (using the =persistent-echo= package).
 *************** TODO Find a less hacky way to keep workspaces displayed
+*************** END
+*************** TODO Find out why this doesn't load automatically anymore
 *************** END
 
 We hook the echoing onto the loading of the workspace module. This has the dual benefit of
@@ -427,6 +573,13 @@ This is configured through a variable in the =windmove= package (which =evil= us
   (setq windmove-wrap-around t))
 #+end_src
 
+
+Doom has two similar functions - =doom/window-enlargen= (bound to ~SPC w o~) and =doom/window-maximize-buffer= (bound to ~SPC w m m~).
+The former preserves a little bit of the other windows even as it maximizes the focused one, maybe in a vain attempt to remind the user that they exist. This always seemed ugly to me, and it being bound to a shorter prefix irks me. It's time to set this right. We'll just overwrite the former binding since I never use it anyway.
+#+begin_src emacs-lisp
+(map! :leader "w o" #'doom/window-maximize-buffer)
+#+end_src
+
 ** Unimpaired-style keys
 I'm quite used to turning search highlights on and off with ~[ h~ and ~] h~. In Doom these move between headings in org-mode, but the same action can also be done with ~C-j~ and ~C-k~, so we can safely remap them.
 #+begin_src emacs-lisp
@@ -465,31 +618,86 @@ Doom sets ~[ e~ and ~] e~ to move between errors. I'm used to using them to /exc
 
 ** Surround
 =evil-embrace= provides more powerful "surround" commands (like adding/deleting surrounding org blocks).
-Since I'm not comfortable with the keys yet, I'll turn on the helpful (but slightly annoying) help popup.
+The show-help popup is immensely irritating though.
 #+begin_src emacs-lisp
 (after! evil-embrace
-  (setq evil-embrace-show-help-p t))
+  (setq evil-embrace-show-help-p nil))
+#+end_src
+
+** Ex commands
+Evil provides an option to run substitute commands globally by default, which is almost always what I want.
+#+begin_src emacs-lisp
+(after! evil
+  (setq evil-ex-substitute-global t))
 #+end_src
 
 * Org-mode
 org-mode forms the base of this config, so some quick improvements are sorely needed.
 
+** Startup
+Org-mode provides a plethora of startup options.
+One of these that I really enjoy (and is turned off by default) is inline latex previews. One downside of this is that the previews might take some time to build if they're not already built, but they're often important enough for the wait.
+#+begin_src emacs-lisp
+(after! org
+  (setq org-startup-with-latex-preview t))
+#+end_src
+
+Similarly, inline images are always welcome, but this starts requesting all the links in the buffer at startup which takes a long-ass time. However, downloading remote images takes a long time, so we never want that at /startup/.
+#+begin_src emacs-lisp
+(after! org
+  (setq org-display-remote-inline-images 'skip)
+  (setq org-startup-with-inline-images t))
+#+end_src
+
 ** Blocks
 First, some templates are needed to quickly add source blocks.
 #+BEGIN_SRC emacs-lisp
 (after! org
+  (delete! '("l" . "export latex") org-structure-template-alist)
   (pushnew! org-structure-template-alist
             '("el" . "src emacs-lisp")
             '("hs" . "src haskell")
             '("py" . "src python")
+            '("l" . "src latex")
+            '("ls" . "src latex")
             '("sh" . "src shell")))
 #+END_SRC
 
-** Libraries
-=org-tempo= needs to be loaded for template expansions like =<el= to work. Inline tasks are also incredibly useful. =org-inlinetask= needs to be loaded for this.
-Since these take a decent amount of time to load and are not /immediately/ required, we can defer their loading. We /don't/ need to guard this with an =after! org= block since they're only loaded when emacs is idle.
+The help message at the top is ugly and it's only required because the bindings are inconsistent (sometimes confirmation is ~C-c C-c~ and sometimes it's ~C-c C-'~). The bindings are also inconsistent with the rest of Doom.
+A bunch of improvements can be made here, starting with turning off the help message header.
 #+begin_src emacs-lisp
-(doom-load-packages-incrementally '(org-tempo org-inlinetask))
+(after! org
+  (setq org-edit-src-persistent-message nil))
+#+end_src
+
+#+begin_src emacs-lisp
+(after! org
+  (map! :map org-src-mode-map
+        :localleader
+        "," #'org-edit-src-exit
+        "s" #'org-edit-src-save
+        "k" #'org-edit-src-abort))
+#+end_src
+
+*************** TODO Modify ~:wq~, ~:q~, ~:w~ to call =org-edit-src-exit=, =org-edit-src-abort=, =org-edit-src-save= respectively
+   Also consider Spacemacs' ~,,~ , ~,s~, and ~,k~ to confirm, save, and exit.
+*************** END
+
+*************** TODO The normal-mode keys don't always work at the start
+But the insert-mode (or emacs-mode maybe?) ones always do (~C-, [sk,]~) and the normal-mode ones do after that.
+I'm not sure if this is a loading issue, since normal keys revert to being non-functional /again/ when visiting the  buffer again, even when they worked just a moment earlier.
+*************** END
+
+It's also irritating that another window pops up whenever we're editing a special block. We can make it open in the same window to preserve the layout.
+#+begin_src emacs-lisp
+(after! org
+  (setq org-src-window-setup 'current-window))
+#+end_src
+
+
+=ob-async= allows asyncrhonous execution of code blocks but does *not* support =:session=, which (to me) is quite a crucial deficiency. =ob-session-async= fixes this.
+#+begin_src emacs-lisp
+(use-package! ob-session-async)
 #+end_src
 
 ** Look
@@ -535,12 +743,14 @@ I like adding empty lines between headlines to keep things neatly organized, but
 
 By default the title uses the normal font and height, just in bold. We can make the font a little prettier and hide a few keywords.
 #+begin_src emacs-lisp
-(setq +org-title-font "FARRAY")
+(setq +org-title-font nil)
 (setq +org-title-height 3.0)
 
 (after! org
   (pushnew! org-hidden-keywords 'title 'author)
-  (modify-theme! (set-face-attribute 'org-document-title nil :family +org-title-font :height +org-title-height)))
+  (modify-theme!
+   (when +org-title-font (set-face-attribute 'org-document-title nil :family +org-title-font))
+   (when +org-title-height (set-face-attribute 'org-document-title nil :height +org-title-height))))
 #+end_src
 
 When I was using the default variable-pitch font, I spruced up headings by changing the font. Now that I'm using a better font for everything this doesn't seem as neccessary, but I'll leave this code here in case I want to change the heading font again.
@@ -582,7 +792,7 @@ For now, we'll just make links fixed-pitch and save ourselves the trouble.
 
 Some themes apply a foreground color to =org-hide=, which sort of defeats the purpose of it - for instance, it makes leading stars somewhat visible even if =org-hide-leading-stars= is set. Due to =solaire-mode= changing the default background for some buffers, we have to set =solaire-org-hide-face= in addition to the standard =org-hide=.
 #+begin_src emacs-lisp
-(after! org
+(after! (org solaire-mode)
   (modify-theme!
    (set-face-foreground 'org-hide (face-background 'default))
    (set-face-attribute 'solaire-org-hide-face nil
@@ -601,8 +811,52 @@ Some themes make the block background extend to the end of the line, some don't;
 #+begin_src emacs-lisp
 (after! org
   (modify-theme!
-   (dolist (face '(org-block org-block-begin-line org-block-end-line))
+   (dolist (face '(org-block org-block-begin-line org-block-end-line org-quote))
      (set-face-attribute face nil :background (face-background 'org-block) :extend t))))
+#+end_src
+
+Super and subscripts are nice to have in emacs itself, but I don't want them to escape into exported documents unless I absolutely want them.
+#+begin_src emacs-lisp
+(after! org
+  (setq org-export-with-sub-superscripts '{}))
+#+end_src
+
+Headlines in org-mode are first-class, by which I mean that a lot of information is stored only as headlines rather than just having them as content headers.
+This means that they should be very readable, and having non-emphasized headlines helps a lot in this regard.
+#+begin_src emacs-lisp
+(after! org
+  (modify-theme!
+   (dolist (lvl (number-sequence 1 8))
+     (let ((face (intern (concat "org-level-" (number-to-string lvl)))))
+       (set-face-bold face nil)))))
+#+end_src
+
+In the same vein, other elements also look better without being bolded.
+#+begin_src emacs-lisp
+(after! org
+  (modify-theme!
+   (set-face-bold 'org-link nil)))
+#+end_src
+
+** Libraries
+=org-tempo= needs to be loaded for template expansions like =<el= to work. Inline tasks are also incredibly useful. =org-inlinetask= needs to be loaded for this.
+Since these take a decent amount of time to load and are not /immediately/ required, we can defer their loading. We /don't/ need to guard this with an =after! org= block since they're only loaded when emacs is idle.
+#+begin_src emacs-lisp
+(doom-load-packages-incrementally '(org-tempo org-inlinetask))
+#+end_src
+
+Turns out that the syntax highlighting of inline tasks is borked (wrong indentation with =org-indent-mode=, wrong highlighting according to level, content below the "END" heading is indented) if =org-inlinetask= is not loaded. This is irritating enough that I'll take the load time. We'll keep the incremental loading in case an org buffer isn't needed right away.
+*************** TODO Since =org-mode-hook= is run *after* the mode has been activated, =org-inlinetask= sometimes loads after the buffer loads org-mode, which screws up the syntax of inline tasks.
+I always end up reloading org-mode in this case - maybe this could happen automatically.
+This is what I've tried below. See if it works.
+*NO IT DOESN'T.
+**************** END
+
+#+begin_src emacs-lisp
+;; (after! org
+;;   (add-hook! 'org-mode-hook (unless (featurep 'org-inlinetask)
+;;                                 (require 'org-inlinetask)
+;;                                 (org-mode-restart))))
 #+end_src
 
 ** LaTeX
@@ -629,6 +883,8 @@ In the meantime, we'll turn off spell-checking by default.
 #+end_src
 
 *** TODO add bindings for toggling writegood and langtool
+
+*** TODO stop remote evaluation of code blocks
 
 ** Notes
 Using packages like =org-roam=, =org-noter=, =org-ref=; it's possible to build a good workflow for quickly searching, taking notes, and connecting papers.
@@ -682,26 +938,81 @@ By default it uses port 8080 for the server. Since it's pretty common to use tha
   (setq org-roam-server-port 65529))
 #+end_src
 
-=org-roam-server= does not provide any way to automatically browse to the served address, and neither does it start automatically. We'll make both of those things happen. Note that =org-roam-server-mode-hook= is called both when the mode is enabled /and/ when it's disabled, so we have to explicitly check before we browse to its url.
-*************** TODO Open this url with a dedicated browser instead of opening it in a new tab
-With multiple browsers open it's hard to tell where it'll open. Even if there's just a single one open, it's often dedicated to a particular thing (videos, documentation...) - in which case I don't want org-roam-server to overtake it. This can be solved by dedicating a new browser for it.
-Ideally this browser would be lightweight af since it just needs to run some javascript.
-*************** END
+We set a browser to use which will open up org-roam-server's page. Characteristics that it should have:
+- should open up a /new/ window instead of a tab, since it's not predictable which browser that will show up in (in case of multiple browsers)
+- as lightweight as possible, since it just has to run some javascript
+- should use the desktop file we've set up when opening =org-protocol://= links
+
+I considered a number of browsers for this:
+| browser | renders correctly? | handles org-protocol? | lightweight?                          | comments                                                       |
+|---------+--------------------+-----------------------+---------------------------------------+----------------------------------------------------------------|
+| [[https://www.mozilla.org][firefox]] | yes                | yes                   | lol no                                |                                                                |
+| [[https://surf.suckless.org][surf]]    | yes                | no                    | poster child for lightweight browsers | kept prepending =http://= to the org-protocol links              |
+| [[https://www.dillo.org][dillo]]   | no                 | ?                     | yes                                   | the UI looks god awful                                         |
+| [[https://astian.org/midori/about/][midori]]  | yes                | yes                   | yes                                   | detaches from the terminal & all tabs run in the same process, |
+|         |                    |                       |                                       | so the process cannot be killed cleanly                        |
+
+Out of these midori fulfilled all my criteria, but I haven't had enough time with it to verify the "lightweight" claim.
 
 #+begin_src emacs-lisp
+(defvar +org-roam-server-browser-program '("midori" "-a")
+  "Browser program (and its arguments) to use to view `org-roam-server' page.")
+#+end_src
+
+=org-roam-server= does not provide any way to automatically browse to the served address, and neither does it start automatically. We'll  make both of those things happen. Note that =org-roam-server-mode-hook= is called both when the mode is enabled /and/ when it's disabled, so we have to explicitly check before we browse to its url.
+#+begin_src emacs-lisp
 (after! org-roam-server
-  (defun my/org-roam-server-browse-to ()
-    (interactive)
-    (browse-url-xdg-open (format "http://%s:%d" org-roam-server-host org-roam-server-port)))
+  (defvar +org-roam-server-browser-process nil
+    "Browser process open at org-roam-server's address.")
+
+  (defun +org-roam-server-start-browser ()
+    (unless (and +org-roam-server-browser-process
+                 (process-live-p +org-roam-server-browser-process))
+      (setq +org-roam-server-browser-process
+            (apply #'start-process "org-roam-server-browser" nil
+                   `(,@+org-roam-server-browser-program
+                     ,(format "http://%s:%d" org-roam-server-host org-roam-server-port)))
+            )))
+
+  (defun +org-roam-server-stop-browser ()
+    (when (and +org-roam-server-browser-process
+               (process-live-p +org-roam-server-browser-process))
+      (stop-process +org-roam-server-browser-process)))
 
   (add-hook! 'org-roam-server-mode-hook
-    (when org-roam-server-mode (my/org-roam-server-browse-to))))
+    (if org-roam-server-mode
+        (+org-roam-server-start-browser)
+      (+org-roam-server-stop-browser))))
 #+end_src
 
 We'll also replace our keybindings to point to org-roam-server instead of org-roam's default graph command.
 #+begin_src emacs-lisp
 (map! :leader "n r g" #'org-roam-server-mode)
 #+end_src
+
+The physics simulation has some room for improvement, especially in the repulsion department.
+#+begin_src emacs-lisp
+(after! org-roam-server
+  (setq org-roam-server-network-vis-options
+        (json-encode-plist
+         '(:physics (:solver forceAtlas2Based            ;; better repulsion
+                     :forceAtlas2Based (:avoidOverlap 1  ;; try to never overlap
+                                        :damping 0.99)   ;; maintain velocity from previous iteration
+                     :stabilization (:iterations 500000) ;; keep the simulation going
+                     :timestep 0.4                       ;; longer and smoother simulation
+                     :minVelocity 0.001)))))             ;; never stop never stopping
+#+end_src
+
+**** TODO Make org-protocol link open up in same emacs from which the server was started
+Open it in the same *frame* as well.
+
+**** TODO Try using =eaf= to replicate =obr-viz= for =org-roam=
+=obr-viz= uses =eaf= to do this *inside* emacs, which is really cool. Try to do something similar for =org-roam=.
+I should also probably change the browser to use =eaf= anyway.
+Note: EAF's browser uses up almost *100%* of the CPU. Don't try this until/unless you find a fix for that.
+
+**** TODO When trying to start the server, change port automatically if the previous one is bound
+Or just kill the previous server, who cares.
 
 *** Setting up org-protocol
 org-protocol needs to be set up for =org-roam= to capture requests from anywhere in the system (including the org-roam graph).
@@ -726,20 +1037,83 @@ MimeType=x-scheme-handler/org-protocol" > ~/.local/share/applications/org-protoc
 xdg-mime default org-protocol.desktop x-scheme-handler/org-protocol
 #+end_src
 
+*** Navigating through tags
+org-roam currently does not provide a great mechanism for traversing through tags. It allows /searching/ through them through the =ivy= (or whatever you use for =completing-read=) interface, but once you're one a file with a particular tag you can't just click on something (or press a button) to go to find other pages which share that tag. This is somewhat surprising since the author's demos show tags being specially highlighted (with a prefixed $\S$ and a different color). Looking at the video some more I discovered that /all/ file links were displayed in the same manner, so the "tags" must have just been a list of file links.
+
+[[https://d33wubrfki0l68.cloudfront.net/caf00e01f2762110365beb820f757ccfe15e50df/5facd/ox-hugo/org-roam-buffer.gif][demo]]
+
+Even so, not having this functionality defeats the entire purpose of having tags (imo).
+
+# However, although Roam treats tags and files differently, the author's demo doesn't seem to do the same. In the video, he uses  a keybinding while on a tag to go to the org-roam /file/ linked that tag. (This is perhaps not that surprising, since org-mode doesn't have any mechanism to show tags separately, and even if it did it, the information would be read-only.) Looking through the documentation I could not find the particular command he used for this.
+
+*** TODO Easier keys for org-roam actions when in org-roam buffer
+
+** Agenda
+I want to put TODOs in my org-roam files as well, which I have in subdirectory under =org-directory=.
+Doom sets =org-agenda-files= to =`(,org-directory)=, but org doesn't recurse into it for finding agenda files.
+A simple solution is to just do this manually.
+#+begin_src emacs-lisp
+(after! org
+  (setq org-agenda-files (directory-files-recursively org-directory org-agenda-file-regexp)))
+#+end_src
+
+** Editing
+*** Invisible text
+It's hella hard to handle invisible text like links, emphasised text etc. Here are some improvements to make this easier.
+
+While link urls can be deleted even when they are invisible (through Doom's =+org/remove-link=), they cannot be copied. This can be remedied by modifying =+org/remove-link='s source slightly to produce:
+#+begin_src emacs-lisp
+(after! org
+  (defun +evil-org/copy-link ()
+    "Yank link url at point."
+    (interactive)
+    (unless (org-in-regexp org-link-bracket-re 1)
+      (user-error "No link at point"))
+    (evil-yank (match-beginning 1) (match-end 1))
+    (message "Yanked: %s"
+             (let ((str (current-kill 0)))
+               (set-text-properties 0 (length str) nil str)
+               str)))
+
+  (map! :map org-mode-map
+        :localleader "l y" #'+evil-org/copy-link))
+#+end_src
+
+*** Beamer
+A frame level of 2 is almost always the right choice. I would rather not put this in every file (although that would make it consistent when exporting through any emacs configuration...hmm).
+#+begin_src emacs-lisp
+(after! org
+  (setq org-beamer-frame-level 2))
+#+end_src
+
+[[https://github.com/matze/mtheme][Metropolis]] is a /great/ beamer theme.
+#+begin_src emacs-lisp
+(after! org
+  (setq org-beamer-theme "metropolis"))
+#+end_src
+
+** TODO Consider using =abbrev-mode= (or =dabbrev-mode=?) to turn "->" into either =->= or $\rightarrow$
+
+** TODO Consider installing =org-sidebar=
+
 * Spacemacsy keybindings
 Make some keybindings a bit more like Spacemacs.
 ~SPC :~ (=M-x=) in particular is really hard to hit for such a commonly-used command.
 #+begin_src emacs-lisp
 (map! :leader
       :n "SPC" #'counsel-M-x
+      :n ":"   #'pp-eval-expression
       :n ";"   #'pp-eval-expression)
 #+end_src
 
 * Checkers & Errors
 Vim moves between errors through the "location list", so vim-unimpaired uses ~[ l~ and ~] l~ to move between errors. Since we're using ~[ e~ and ~] e~ to exchange lines, we'll use the same keys for error navigation.
 #+begin_src emacs-lisp
-(map! :n "[ l" #'previous-error
-      :n "] l" #'next-error)
+(let* ((prefix (if (featurep! :checkers syntax) "flycheck-" ""))
+       (previous-error-fn (intern (concat prefix "previous-error")))
+       (next-error-fn (intern (concat prefix "next-error"))))
+  (map! :n "[ l" previous-error-fn
+        :n "] l" next-error-fn))
 #+end_src
 
 Moving between errors is achieved through ={next,previous}-error=. These sometimes fail where =flycheck-{next,previous}-error= succeeds. I'm not sure why, and I don't want to use the flycheck functions all the time since Doom also uses other sources of errors.
@@ -786,10 +1160,38 @@ The in-buffer stage and revert commands ask for confirmation, which severely red
 
 ** TODO Allow staging and reverting of partial/multiple chunks in-buffer through visual selections
 This works in Spacemacs and magit diffs, but not in the buffer of the file itself. It's quite useful, so try to make it work.
+Turns out Spacemacs uses =git-gutter+= (Doom uses =git-gutter=), and the commands =git-gutter+-stage-hunks= and =git-gutter+-revert-hunks= are resonsible for this behaviour.
 
 ** TODO Increase fringe-width in magit buffers to be able to show section collapse indicators
 
+* General coding niceties
+Indent guides are kinda useless if they don't highlight the currently active indent guide.
+The "normal" setting is ='top=, which highlights just the current indent, but there's another setting ='stack= which highlights a lot more - might come in handy some day.
+#+begin_src emacs-lisp
+(after! highlight-indent-guides
+  (setq highlight-indent-guides-responsive 'top))
+#+end_src
+
 * Language-specific settings
+** Programming languages (general)
+The "pretty" symbols in the =:ui pretty-code= module border are really unintuitive. Look at some of these specimens:
+#+BEGIN_EXAMPLE
+:return        "⟼"
+:yield         "⟻"
+:map           "↦"
+#+END_EXAMPLE
+
+There's others which make slightly more sense, but would be better off not being there.
+Instead of turning off  these symbols for each programming language, it's easier to just prune this list of symbols I'll /never/ need.
+#+begin_src emacs-lisp
+(when (featurep! :ui pretty-code)
+ (setq +pretty-code-symbols
+       (doom-plist-delete +pretty-code-symbols
+                          :return :yield :tuple :pipe :def :map :for
+                          :null :true :false :int :float :str :bool ;; types
+                          )))
+#+end_src
+
 ** Shell
 Shell programs typically only need to look for documentation through man pages. Anything more complicated than that is probably not going to be searchable through a keyword alone. We set the documentation lookup handler accordingly. Either =man= or =woman= would work here, but since they are interactive commands, when called as lookup handlers they ask the user for input instead of just using the one passed to them. To get around this we wrap them in a lambda.
 #+begin_src emacs-lisp
@@ -801,14 +1203,69 @@ Shell programs typically only need to look for documentation through man pages. 
     :documentation '(my/woman-non-interactive)))
 #+end_src
 
+** Python
+*** Pretty symbols
+Python is already pretty readable, and the custom "pretty" symbols don't really help in its case.
+*************** TODO This doesn't work, and I have no clue why.
+*************** END
+
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :lang python)
+  (set-ligatures! 'python-mode nil))
+#+END_SRC
+
+*** Django
+# Coding with Django effectively needs a lot of terminal commands, and more importantly, syntax highlighting for the templates.
+# #+begin_src emacs-lisp
+# (use-package! django-mode
+#   :after-call django-mode)
+# #+end_src
+
 ** z3
 =z3-mode= provides some basic interaction with =z3=, but it's really barebones.
 #+begin_src emacs-lisp
 (use-package! z3-mode
   :config
+  ;; (defun +z3/enable-run-on-save ()
+  ;;   (interactive)
+  ;;   (+on-save (z3-execute-region)))
+
   (map! :map z3-mode-map
         :localleader
         :nv "," #'z3-execute-region))
+#+end_src
+
+** Haskell
+*** TODO Start =ghcid= automatically in a separate pane
+Make sure it starts in =insert= or =emacs= mode
+
+** YAML
+Since indentation is so important, =mixed-pitch-mode= creates trouble.
+#+begin_src emacs-lisp
+(when (featurep! :ui zen)
+ (add-hook! yaml-mode (mixed-pitch-mode -1)))
+#+end_src
+
+** Dart
+I'm not sold on the closing labels yet. They just seem to clutter up the code, esp. since the "tree" (or "outline"?) indicators already do most of their job.
+#+begin_src emacs-lisp
+(after! dart-mode
+  (setq lsp-dart-closing-labels nil))
+#+end_src
+
+** Elixir
+Elixir's LSP implementation has to be installed separately, and unfortunately the AUR package (=elixir-ls=) doesn't put it on the path.
+I don't want to pollute my =$PATH= with yet /another/ thing, so we'll add it to just Emacs's =exec-path=, which is the only place it's actually required.
+#+begin_src emacs-lisp
+(when (featurep! :lang elixir +lsp)
+  (after! elixir-mode
+    (add-to-list 'exec-path "/usr/lib/elixir-ls/")))
+#+end_src
+
+The usual folding modes don't work  too well with Elixir. Yafolding seems to work though.
+#+begin_src emacs-lisp
+(after! elixir-mode
+  (add-hook 'elixir-mode-hook #'yafolding-mode))
 #+end_src
 
 * PDF
@@ -863,9 +1320,14 @@ Right now it provides:
     ))
 #+end_src
 
-** TODO display contents through =posframe=
-=pdf-tools= sets image hotspots' =help-echo= message which gets displayed through the echo area.
-It might be possible to change how it's displayed through =show-help-function=.
+=+= and = can be used to zoom in, but =-= can't be used to zoom out as it's overwritten by evil behaviour (sometimes). Let's just make sure everything works as expected.
+#+begin_src emacs-lisp
+(after! pdf-tools
+  (map! :map pdf-view-mode-map
+        "-" #'pdf-view-shrink
+        "=" #'pdf-view-enlarge
+        "+" #'pdf-view-enlarge))
+#+end_src
 
 ** TODO Format annotation contents using org syntax, previewing latex fragments
 
@@ -888,14 +1350,6 @@ It's irritating to have to copy and paste a filename from a file just to open it
       "." #'find-file-at-point)
 #+end_src
 
-* Shell
-** vterm
-The default scrollback size of 1000 is really small and takes away the advantages of having a searchable history. We'll turn it waaay up.
-#+begin_src emacs-lisp
-(after! vterm
-  (setq vterm-max-scrollback 50000))
-#+end_src
-
 * Force-quit
 Sometimes you just hafta gently nudge emacs to commit sudoku with a =kill -9=.
 #+begin_src emacs-lisp
@@ -907,6 +1361,21 @@ Sometimes you just hafta gently nudge emacs to commit sudoku with a =kill -9=.
 (map! :leader "q F" #'+force-kill-emacs)
 #+end_src
 
+* Shell/Terminal
+** vterm
+The default scrollback size of 1000 is really small and takes away the advantages of having a searchable history. We'll turn it waaay up.
+#+begin_src emacs-lisp
+(after! vterm
+  (setq vterm-max-scrollback 50000))
+#+end_src
+
+A lot of the terminal programs I use have vim bindings, so it becomes a major hassle to escape /evil/'s normal mode to use the program's normal mode. Moving the cursor is never trustworthy since it might just have moved for emacs and not for the underlying program. At the same time, disabling evil-mode in those buffers is not a great solution since then I don't access to any command (unless I map those in). =evil-emacs-state= provides a good compromise between the two by accessing leader keys through the alt leader (~C-SPC~ for me).
+We'll enable this whenever we enter a terminal buffer so that it always does the /right thing/ (TM).
+#+begin_src emacs-lisp
+(after! (evil vterm)
+  (evil-set-initial-state 'vterm-mode 'emacs))
+#+end_src
+
 * Projectile
 ** Running make
 Surprisingly, Doom provides =+make/run= and =+make/run-last= to run make commands in a project (no more switching to the right directory), but does not bind them to any keys. Well, the ~<leader> p~ prefix is right there, and ~m~ isn't bound to anything (atleast right now).
@@ -915,5 +1384,41 @@ Surprisingly, Doom provides =+make/run= and =+make/run-last= to run make command
   (map! :leader
         "p m" #'+make/run
         "p M" #'+make/run-last))
+#+end_src
+
+* Text zoom
+#+begin_src emacs-lisp
+(when (featurep! :ui hydra)
+  (map! :leader
+        (:prefix ("z" . "zoom")
+         :desc "text-zoom" "f" #'+hydra/text-zoom/body)))
+#+end_src
+
+* Folding
+The usual folding methods provided with Doom are sometimes not enough - I noticed this with Elixir.
+=yafolding= seems like it's the solution here (it worked with Elixir, at least).
+
+The Doom module which controls folding is =:editor fold=. Instead of changing this function and losing out on potential updates down the line, we can use a flimsy band-aid and override the keys in =yafolding-mode=.
+
+#+begin_src emacs-lisp
+(after! yafolding
+  (map! :map yafolding-mode-map
+        :n "zc" #'yafolding-hide-element
+        :n "zo" #'yafolding-show-element
+        :n "za" #'yafolding-toggle-element
+        :n "zC" #'yafolding-hide-all
+        :n "zO" #'yafolding-show-all
+        :n "zA" #'yafolding-toggle-all))
+#+end_src
+* Autocompletion
+In =mixed-pitch-mode= the completions have screwed-up alignment. We fix this by making them fixed-pitch.
+#+begin_src emacs-lisp
+(after! (company mixed-pitch)
+  (let* ((company-prefixes '("company-preview-" "company-tooltip-")) ;; these are the only prefixes we care about
+         (company-face-p (lambda (face)
+                           (-any (lambda (prefix) (s-starts-with-p prefix (symbol-name face)))
+                                 company-prefixes)))
+         (company-faces (-filter company-face-p (face-list))))
+    (setq mixed-pitch-fixed-pitch-faces (append mixed-pitch-fixed-pitch-faces company-faces))))
 #+end_src
 

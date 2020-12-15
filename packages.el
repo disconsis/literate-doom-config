@@ -10,7 +10,15 @@
 ;; more interactive org-roam graphs
 (package! org-roam-server)
 
-;; themes
+;; presentations from org
+;;(package! emacs-reveal)
+
+
+
+;; ------------
+;;    themes
+;; ------------
+
 (package! tao-theme)
 
 ;; get all updates for org-roam
@@ -19,13 +27,11 @@
 ;; toggle latex fragments on the go
 (package! org-fragtog)
 
+;; org in non-org files
+(package! outshine)
+
 ;; utility package
 (package! move-text)
-
-
-;; ------------
-;;    themes
-;; ------------
 
 ;; packs a number of themes: https://github.com/owainlewis/emacs-color-themes
 ;; - granger
@@ -61,7 +67,51 @@
 (package! plan9-theme)        ;; it's hiiiiigh noon
 (package! flatui-theme)       ;; high-constrast, slightly bluish
 
+(package! base16-theme)
+
+;; minimal themes
+(package! brutalist-theme)
+(package! minimal-theme)
+
+;; random themes
+(package! colonoscopy-theme)
+
+
+;; poet, for org-ricing
+(package! poet-theme)
+
 
 ;; research
 (package! z3-mode
   :recipe (:host github :repo "disconsis/z3-mode"))
+
+;; django
+(package! pony-mode)
+
+;; strace
+(package! strace-mode)
+
+(package! csv-mode)
+
+;; org-mode
+(package! ob-session-async
+  :recipe (:host github :repo "jackkamm/ob-session-async"))
+
+;; sml
+(package! sml-mode)
+
+;; ada
+(package! ada-mode) ;; some issues with dependencies
+
+;; epub
+(package! nov)
+
+;; -----
+;;  PDF
+;; -----
+;; FIXME
+;; (package! pdf-continuous-scroll-mode
+;;   :recipe (:host github :repo "dalanicolai/pdf-continuous-scroll-mode.el"))
+
+;; general folding (esp. elixir)
+(package! yafolding)

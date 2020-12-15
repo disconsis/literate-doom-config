@@ -1,5 +1,13 @@
 ;;; init.el -*- lexical-binding: t; -*-
 
+;; don't load org.elc files to prevent 'undefined ad-Advice-newline-and-indent' error -- for now
+;; see [[https://github.com/hlissner/doom-emacs/issues/3172]]
+(call-process-shell-command
+ (format
+  "find '%s' -name 'org.elc' -delete >/dev/null 2>&1 &"
+  user-emacs-directory))
+
+
 
 (doom! :input
        ;;chinese
@@ -19,20 +27,20 @@
        ;;fill-column       ; a `fill-column' indicator
        hl-todo             ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        hydra
-       ;;indent-guides     ; highlighted indent columns
+       indent-guides       ; highlighted indent columns
        ;;minimap           ; show a map of the code on the side
        modeline            ; snazzy, Atom-inspired modeline, plus API
        nav-flash           ; blink cursor line after big motions
        neotree             ; a project drawer, like NERDTree for vim
        ophints             ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
-       pretty-code         ; ligatures or substitute text with pretty symbols
+       (ligatures +extra)  ; ligatures or substitute text with pretty symbols
        ;;tabs              ; an tab bar for Emacs
        ;;treemacs          ; a project drawer, like neotree but cooler
        ;;unicode           ; extended unicode support for various languages
        vc-gutter           ; vcs diff in the fringe
        ;;vi-tilde-fringe   ; fringe tildes to mark beyond EOB
-       ;;window-select     ; visually switch windows
+       window-select       ; visually switch windows
        workspaces          ; tab emulation, persistence & separate workspaces
        zen                 ; distraction-free coding or writing
 
@@ -94,14 +102,14 @@
        :lang
        ;;agda              ; types of types of types of types...
        ;;cc                ; C/C++/Obj-C madness
-       ;;clojure           ; java with a lisp
+       clojure             ; java with a lisp
        ;;common-lisp       ; if you've seen one lisp, you've seen them all
        ;;coq               ; proofs-as-programs
        ;;crystal           ; ruby at the speed of c
        ;;csharp            ; unity, .NET, and mono shenanigans
-       ;;data              ; config/data formats
-       ;;(dart +flutter)   ; paint ui and not much else
-       ;;elixir            ; erlang done right
+       data                ; config/data formats
+       ;; (dart +lsp +flutter); paint ui and not much else
+       (elixir +lsp)       ; erlang done right
        elm                 ; care for a cup of TEA?
        emacs-lisp          ; drown in parentheses
        ;;erlang            ; an elegant language for a more civilized age
@@ -114,7 +122,7 @@
        (haskell +dante)    ; a language that's lazier than I am
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ;
-       ;;json              ; At least it ain't XML
+       json                ; At least it ain't XML
        ;;(java +meghanada) ; the poster child for carpal tunnel syndrome
        (javascript +lsp)   ; all(hope(abandon(ye(who(enter(here))))))
        ;;julia             ; a better, faster MATLAB
@@ -128,14 +136,14 @@
        ;;nim               ; python + lisp at the speed of c
        nix                 ; I hereby declare "nix geht mehr!"
        ocaml               ; an objective camel
-       (org +roam +noter)  ; organize your plain life in plain text
+       (org +pretty +roam +noter)  ; organize your plain life in plain text
        ;;perl              ; write code no one else can comprehend
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
        (python +lsp)       ; beautiful is better than ugly
        ;;qt                ; the 'cutest' gui framework ever
-       ;;racket            ; a DSL for DSLs
+       racket              ; a DSL for DSLs
        rest                ; Emacs as a REST client
        ;;rst               ; ReST in peace
        ;;(ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
@@ -148,7 +156,7 @@
        ;;swift             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
        web                 ; the tubes
-       ;;yaml              ; JSON, but readable
+       yaml                ; JSON, but readable
 
        :email
        ;;(mu4e +gmail)
