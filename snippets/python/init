@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: init-args
+# key: ini
+# uuid: init-ars
+# group: definitions   
+# --
+def __init__(self${1:, *args}):
+    ${1:$(s-join "\n" (--map (s-concat "self." it " = " it) (--remove (s-starts-with? "*" it)  (s-split "," str 'omit-nulls))))}
+    $0
