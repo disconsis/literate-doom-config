@@ -1428,3 +1428,9 @@ In =mixed-pitch-mode= the completions have screwed-up alignment. We fix this by 
     (setq mixed-pitch-fixed-pitch-faces (append mixed-pitch-fixed-pitch-faces company-faces))))
 #+end_src
 
+* Stop doom auto-starting modes
+Doom adds a bunch of hooks for each module in =init.el=, which I then keep turning off each time I open a new buffer.
+#+begin_src emacs-lisp
+(remove-hook! '(prog-mode-hook text-mode-hook conf-mode-hook) #'highlight-indent-guides-mode)
+(remove-hook! '(text-mode-hook) #'spell-fu-mode)
+#+end_src
