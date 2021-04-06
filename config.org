@@ -231,6 +231,15 @@ The plan9 light theme looks like leuven and being so yellow, is easy on the eyes
    (set-face-attribute 'org-level-1 nil :family 'unspecified)))
 #+end_src
 
+kaolin themes are nice, but the modeline border is not.
+#+begin_src emacs-lisp
+(setq kaolin-themes-modeline-border nil)
+#+end_src
+They also need to be added to the bg-swap list of =solaire-mode= to make everything look right.
+#+begin_src emacs-lisp
+(after! solaire-mode (add-to-list 'solaire-mode-themes-to-face-swap "^kaolin-"))
+#+end_src
+
 plan9 also makes the modeline also look god-awful.
 
 The doom-flatwhite theme removes any highlighting from branch names in magit, so they tend to blend together with commit messages when viewing the log. We'll add some of the theme's typical background coloring to them to fix this.
@@ -271,6 +280,17 @@ Right now I just check if they're loaded (with =facep=).
    (dolist (face '(org-block-begin-line org-block-end-line))
      (when (facep face) (set-face-background face (face-background 'hl-line))))
    (when (facep 'org-block) (set-face-background 'org-block org-block-bg))))
+#+end_src
+
+
+Some =kaolin-themes= customization.
+#+begin_src emacs-lisp
+(setq kaolin-themes-comments-style 'normal)
+#+end_src
+
+=doom-solarized-{light,dark}='s italic comments don't look so good. Disable it for everything.
+#+begin_src emacs-lisp
+(setq doom-themes-enable-italic nil)
 #+end_src
 
 *** Matching parentheses
