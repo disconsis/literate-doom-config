@@ -374,6 +374,12 @@ All modes deserve ligatures!
   (setq +ligatures-in-modes t))
 #+end_src
 
+Ligatures "extras" are usually distracting in other modes.
+#+begin_src emacs-lisp
+(when (featurep! :ui ligatures +extra)
+  (setq +ligatures-extras-in-modes '(org-mode)))
+#+end_src
+
 ** Banner
 The startup banner image is customizable, and the default text-based banner could stand to look a little bit better.
 [[https://github.com/search?q=setq+%2Bdoom-dashboard-banner-file&type=Code][Searching github for banners]] yielded 4 pages of results - most of them slight variations on the same image. I collected some of the more interesting ones in [[file:banners/][banners/]].
@@ -1434,6 +1440,7 @@ The Doom module which controls folding is =:editor fold=. Instead of changing th
         :n "zO" #'yafolding-show-all
         :n "zA" #'yafolding-toggle-all))
 #+end_src
+
 * Autocompletion
 In =mixed-pitch-mode= the completions have screwed-up alignment. We fix this by making them fixed-pitch.
 #+begin_src emacs-lisp
