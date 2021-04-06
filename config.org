@@ -797,6 +797,17 @@ In the same vein, other elements also look better without being bolded.
    (set-face-bold 'org-link nil)))
 #+end_src
 
+
+For consistency's sake, it's useful to make the outshine levels look the same as the org levels, regardless of theme.
+#+begin_src emacs-lisp
+(after! outshine
+  (modify-theme!
+   (dolist (lvl (number-sequence 1 8))
+     (let ((org-level-face (intern (format "org-level-%d" lvl)))
+           (outshine-level-face (intern (format "outshine-level-%d" lvl))))
+       (set-face-attribute outshine-level-face nil :inherit org-level-face :underline t)))))
+#+end_src
+
 ** Libraries
 =org-tempo= needs to be loaded for template expansions like =<el= to work. Inline tasks are also incredibly useful. =org-inlinetask= needs to be loaded for this.
 Since these take a decent amount of time to load and are not /immediately/ required, we can defer their loading. We /don't/ need to guard this with an =after! org= block since they're only loaded when emacs is idle.
