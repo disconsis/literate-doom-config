@@ -425,6 +425,17 @@ The modeline looks much better to me without any bold or italic faces.
            (set-face-italic face nil)))))
 #+end_src
 
+
+I use =display-time-mode= from time-to-time, but only for the clock. By default, it displays mail and system load as well, which I don't want.
+#+begin_src emacs-lisp
+(setq display-time-mail-file 'none
+      display-time-default-load-average nil)
+#+end_src
+
+The time format it uses can also look a bit better.
+#+begin_src emacs-lisp
+(setq display-time-format "%-I:%M %P")
+#+end_src
 ** Tooltips
 Tooltips look a lot cleaner than spamming messages in the echo area, and don't require looking away as much.
 This is useful in a variety of unexpected places (like PDFs, for showing annotation contents).
