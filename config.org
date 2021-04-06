@@ -111,14 +111,6 @@ Delete elements from a sequence in place.
      (setq ,seq (-remove (lambda (item) (funcall final-test ,elt item)) ,seq))))
 #+end_src
 
-The =persistent-echo= package uses the echo area to display messages whenever it's free.
-#+begin_src emacs-lisp
-(use-package! persistent-echo
-    :load-path "local/persistent-echo"
-    :commands (persistent-echo-mode persistent-echo-enable)
-    :defines persistent-echo-display-function)
-#+end_src
-
 Evaluate body immediately after a Doom module has loaded. This is useful because Doom modules don't /provide/ a feature which can be directly referred to. Note that this requires the module to be activated for the body to ever evaluate.
 Since they don't provide a feature and the directory structure is not completely standardized (some have autoload.el and others have an autoload/ directory) I've resorted to having the file stated explicitly as an argument. This could be improved by getting a list of symbols the body requires, doing a compile-time search for those (could be complicated by metaprogramming), and autoloading on /those/ files.
 #+begin_src emacs-lisp
