@@ -1,14 +1,5 @@
 ;;; init.el -*- lexical-binding: t; -*-
 
-;; don't load org.elc files to prevent 'undefined ad-Advice-newline-and-indent' error -- for now
-;; see [[https://github.com/hlissner/doom-emacs/issues/3172]]
-(call-process-shell-command
- (format
-  "find '%s' -name 'org.elc' -delete >/dev/null 2>&1 &"
-  user-emacs-directory))
-
-
-
 (doom! :input
        ;;chinese
        ;;japanese
