@@ -1131,6 +1131,17 @@ The "normal" setting is ='top=, which highlights just the current indent, but th
   (setq highlight-indent-guides-responsive 'top))
 #+end_src
 
+I use =outshine-mode= in so many projects, it's best to just enable it everywhere.
+=outshine-mode= syntax (=-- * heading=) creates some problems with the haskell formatter =ormolu=
+#+begin_src emacs-lisp
+(defun my/fix-outshine-haskell ()
+  (when (eq major-mode 'haskell-mode)
+    (setq-local outshine-regexp-base-char "="))
+  (outshine-mode))
+
+(add-hook! 'prog-mode-hook #'my/fix-outshine-haskell)
+#+end_src
+
 * Language-specific settings
 ** Programming languages (general)
 The "pretty" symbols in the =:ui pretty-code= module border are really unintuitive. Look at some of these specimens:
@@ -1195,6 +1206,33 @@ Python is already pretty readable, and the custom "pretty" symbols don't really 
 #+end_src
 
 ** Haskell
+Literate haskell should focus on the comments rather than the code. As such, the "comment" face should not be dimmed, but should show up as the default.
+#+begin_src emacs-lisp
+(modify-theme!
+ (set-face-attribute 'haskell-literate-comment-face nil :inherit 'default))
+#+end_src
+
+The =\begin{code}= and =\end{code}='s are kinda distracting. Make them like the org mode ligatures.
+NOTE: this doesn't work yet.
+#+begin_src emacs-lisp
+(when (featurep! :ui ligatures +extra)
+  (set-ligatures! 'haskell-literate-mode
+    :src_block "\\begin{code}"
+    :src_block_end "\\end{code}"))
+#+end_src
+
+Almost all the formatters for haskell I could find were lacking in some respect - =ormolu= was the best amongst them.
+#+begin_src emacs-lisp
+(when (featurep! :editor format)
+  (after! haskell
+    (defun format-all--resolve-system (x) (car x))
+    (define-format-all-formatter ormolu
+      (:executable "ormolu")
+      (:install "stack install ormolu")
+      (:modes haskell-mode literate-haskell-mode)
+      (:format (format-all--buffer-easy executable)))))
+#+end_src
+
 *** TODO Start =ghcid= automatically in a separate pane
 Make sure it starts in =insert= or =emacs= mode
 
@@ -1225,6 +1263,15 @@ The usual folding modes don't work  too well with Elixir. Yafolding seems to wor
 #+begin_src emacs-lisp
 (after! elixir-mode
   (add-hook 'elixir-mode-hook #'yafolding-mode))
+#+end_src
+** Lua
+Set up =lua-language-server= downloaded from AUR.
+#+begin_src emacs-lisp
+(setq lsp-clients-lua-language-server-bin "/usr/bin/lua-language-server")
+(setq lsp-clients-lua-language-server-install-dir "/usr/share/lua-language-server")
+(setq lsp-clients-lua-language-server-main-location "/usr/share/lua-language-server/main.lua")
+(setq lsp-clients-lua-language-server-command
+      '("/usr/bin/lua-language-server" "-E" "/usr/share/lua-language-server/main.lua"))
 #+end_src
 
 * PDF
