@@ -82,13 +82,6 @@ These issues discuss ways to do this:
 ** TODO Use =custom-theme-set-faces!= instead of (or in addition to) =modify-theme!=
 This is because if you modify a theme with =modify-theme!= but later try to change it, the additions made are not removed since they're not part of the theme itself.
 This is most evident when using magit with a dark theme /after/ having =doom-flatwhite= enabled for a while.
-#+begin_src emacs-lisp
-(find-file doom-private-dir)
-(load-theme 'doom-flatwhite t)
-(magit-log-all)
-(load-theme 'doom-tomorrow-night t)
-#+end_src
-
 In the same vein, =doom-darken= and =doom-lighten= can be used for slightly darkening lightening colors.
 
 * Utility functions/packages
