@@ -76,6 +76,8 @@
 ;; random themes
 (package! colonoscopy-theme)
 
+;; a collection of good themes
+(package! kaolin-themes)
 
 ;; poet, for org-ricing
 (package! poet-theme)
