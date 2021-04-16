@@ -380,12 +380,28 @@ Ligatures "extras" are usually distracting in other modes.
   (setq +ligatures-extras-in-modes '(org-mode)))
 #+end_src
 
-** Banner
+** Dashboard
+Lastly, the doom dashboard “useful commands” are no longer useful to me, and neither is the github link in the footer. For a particularly clean look, disable the modeline and =hl-line-mode=, and also hide the cursor. [taken from [[https://tecosaur.github.io/emacs-config/config.html#splash-screen,code--3][here]]]
+#+begin_src emacs-lisp
+(remove-hook! '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu #'doom-dashboard-widget-footer)
+(add-hook! '+doom-dashboard-mode-hook (hide-mode-line-mode 1) (hl-line-mode -1))
+(setq-hook! '+doom-dashboard-mode-hook evil-normal-state-cursor (list nil))
+#+end_src
+
+Doom also runs =doom-display-benchmark-h= after init files have loaded. This needs to be done to set the init time, however this has the side effect of printing this in the minibuffer, which I don't like seeing since it's also repeated in the dashboard.
+To stop this we have to wrap the call inside a =(let (inhibit-message t) ...)= OR just pass a non-nil value as the optional argument.
+#+begin_src emacs-lisp
+(remove-hook 'window-setup-hook #'doom-display-benchmark-h)
+(add-hook! 'window-setup-hook (doom-display-benchmark-h 'return))
+;; (remove-hook! '+doom-dashboard-functions #'doom-dashboard-widget-loaded)
+#+end_src
+
+*** Banner
 The startup banner image is customizable, and the default text-based banner could stand to look a little bit better.
 [[https://github.com/search?q=setq+%2Bdoom-dashboard-banner-file&type=Code][Searching github for banners]] yielded 4 pages of results - most of them slight variations on the same image. I collected some of the more interesting ones in [[file:banners/][banners/]].
 #+begin_src emacs-lisp
 (setq +doom-dashboard-banner-dir (expand-file-name "banners" doom-private-dir)
-      +doom-dashboard-banner-file "doom-white.png")
+      +doom-dashboard-banner-file "e-blue.svg")
 #+end_src
 
 ** Startup color
@@ -462,6 +478,7 @@ The time format it uses can also look a bit better.
 #+begin_src emacs-lisp
 (setq display-time-format "%-I:%M %P")
 #+end_src
+
 ** Tooltips
 Tooltips look a lot cleaner than spamming messages in the echo area, and don't require looking away as much.
 This is useful in a variety of unexpected places (like PDFs, for showing annotation contents).
