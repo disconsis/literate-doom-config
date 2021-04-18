@@ -1495,3 +1495,14 @@ Doom adds a bunch of hooks for each module in =init.el=, which I then keep turni
 (remove-hook! '(prog-mode-hook text-mode-hook conf-mode-hook) #'highlight-indent-guides-mode)
 (remove-hook! '(text-mode-hook) #'spell-fu-mode)
 #+end_src
+
+
+* Less useful, but *fancy*, features
+** Screenshot code
+Doesn't provide autoloading itself, so we load on calling the commands.
+#+begin_src emacs-lisp
+(use-package! escr
+  :commands (escr-region-screenshot
+             escr-frame-screenshot
+             escr-window-screenshot))
+#+end_src

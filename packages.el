@@ -117,3 +117,7 @@
 
 ;; general folding (esp. elixir)
 (package! yafolding)
+
+;; take code screenshots!
+(package! escr
+  :recipe (:host github :repo "atykhonov/escr"))
