@@ -548,12 +548,6 @@ The most important part is switching to the current directory with a single key 
   (map! :n "-" #'dired-jump))
 #+end_src
 
-The details in =dired= create a lot of visual clutter and it's rarely needed, so we'll turn it off at the start. If required, it's easily accessible through ~(~.
-#+begin_src emacs-lisp
-(after! dired
-  (add-hook 'dired-mode-hook #'dired-hide-details-mode))
-#+end_src
-
 Resizing is quite cumbersome in Doom (and also in default Emacs) since you have to repeat the keys over and over again for each increment or decrement. Doom implements a  hydra for this, but it doesn't bind any keys to it for some reason. We'll do that ourselves.
 This has a major downside in the fact that windows /flicker/ a lot when using its operations.
 #+begin_src emacs-lisp
@@ -1395,6 +1389,24 @@ It's irritating to have to copy and paste a filename from a file just to open it
 #+begin_src emacs-lisp
 (map! :map doom-leader-file-map
       "." #'find-file-at-point)
+#+end_src
+
+The details in =dired= create a lot of visual clutter and it's rarely needed, so we'll turn it off at the start. If required, it's easily accessible through ~(~.
+#+begin_src emacs-lisp
+(after! dired
+  (add-hook 'dired-mode-hook #'dired-hide-details-mode))
+#+end_src
+
+Add useless directories/files to =dired-omit-files= to reduce visual clutter in project listings.
+#+begin_src emacs-lisp
+(after! dired
+  (require 'rx)
+  (setq dired-omit-files
+        (rx (or (seq bol "." eol)
+                (seq bol ".." eol)
+                (seq bol ".git" eol)
+                (seq bol "__pycache__" eol)
+                (seq bol ".pytest_cache" eol)))))
 #+end_src
 
 * Force-quit
