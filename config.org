@@ -1445,6 +1445,13 @@ Surprisingly, Doom provides =+make/run= and =+make/run-last= to run make command
         "p M" #'+make/run-last))
 #+end_src
 
+** Project search
+Provided through ~SPC /~ and ~SPC s p~, but for some reason I never remember those.
+#+begin_src emacs-lisp
+(map! :leader
+      "p /" #'+default/project-search)
+#+end_src
+
 * Text zoom
 #+begin_src emacs-lisp
 (when (featurep! :ui hydra)
