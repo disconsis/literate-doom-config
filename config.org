@@ -1504,5 +1504,8 @@ Doesn't provide autoloading itself, so we load on calling the commands.
 (use-package! escr
   :commands (escr-region-screenshot
              escr-frame-screenshot
-             escr-window-screenshot))
+             escr-window-screenshot)
+  :init
+  (setq escr-screenshot-directory (expand-file-name "~/pictures/scrots")
+        escr-screenshot-format "code-%Y-%m-%d-%H.%M.%S.png"))
 #+end_src
