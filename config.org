@@ -1226,6 +1226,11 @@ Python is already pretty readable, and the custom "pretty" symbols don't really 
 #   :after-call django-mode)
 # #+end_src
 
+*** pyls
+#+begin_src emacs-lisp
+(when (featurep! :lang python +lsp)
+  (setq lsp-pyls-plugins-pycodestyle-max-line-length 120))
+#+end_src
 ** z3
 =z3-mode= provides some basic interaction with =z3=, but it's really barebones.
 #+begin_src emacs-lisp
