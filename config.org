@@ -690,6 +690,12 @@ It's also irritating that another window pops up whenever we're editing a specia
 (use-package! ob-session-async)
 #+end_src
 
+org-mode tries to indent src blocks by 2, which requires frequent indentation problems. This turns it off.
+#+begin_src emacs-lisp
+(after! org
+  (setq org-edit-src-content-indentation 0))
+#+end_src
+
 ** Look
 Line numbers also do not make a lot of sense for text-based modes. Doom adds a hook to enable them in text-mode, so we remove that to reduce computation.
 #+begin_src emacs-lisp
