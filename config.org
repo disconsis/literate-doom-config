@@ -1227,13 +1227,11 @@ Shell programs typically only need to look for documentation through man pages. 
 ** Python
 *** Pretty symbols
 Python is already pretty readable, and the custom "pretty" symbols don't really help in its case.
-*************** TODO This doesn't work, and I have no clue why.
-*************** END
-
-#+BEGIN_SRC emacs-lisp
+The "prettified" symbols for python are set by the default python progmode.
+#+begin_src emacs-lisp
 (when (featurep! :lang python)
-  (set-ligatures! 'python-mode nil))
-#+END_SRC
+  (setq python-prettify-symbols-alist nil))
+#+end_src
 
 *** Django
 # Coding with Django effectively needs a lot of terminal commands, and more importantly, syntax highlighting for the templates.
@@ -1516,7 +1514,6 @@ Doom adds a bunch of hooks for each module in =init.el=, which I then keep turni
 (remove-hook! '(prog-mode-hook text-mode-hook conf-mode-hook) #'highlight-indent-guides-mode)
 (remove-hook! '(text-mode-hook) #'spell-fu-mode)
 #+end_src
-
 
 * Less useful, but *fancy*, features
 ** Screenshot code
