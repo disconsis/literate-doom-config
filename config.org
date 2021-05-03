@@ -4,9 +4,9 @@
 #+STARTUP: fold
 
 Enable lexical binding for performance
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ;;; -*- lexical-binding: t; -*-
-#+END_SRC
+#+end_src
 
 * Ideas
 Improvement ideas go here.
@@ -179,7 +179,6 @@ Other font settings are:
 - =doom-unicode-extra-fonts= which is for unicode overrides over the fallback
 - =doom-big-font= which is used for presentations with =doom-big-font-mode=
 The defaults for all of these are pretty good (the last one defaulting to the default =doom-font=)
-
 
 *** TODO Add =doom-unicode-font= as fallback
 
@@ -435,19 +434,6 @@ A vim package I used to use had a configurable "blacklist" for buffer encodings 
 (setq doom-modeline-buffer-encoding nil)
 #+end_src
 
-*************** TODO Turn off modal indicators
-The icons are only good as eye-candy, since it's impossible to tell your mode just from a color (which is also dependent on the color scheme if I'm not mistaken). The text indicators do a good job of "indicating", but look terrible and aren't configurable. Most importantly, I find I just don't /need/ the indicators.
-However, turning it off doesn't seem to just be a matter of setting a variable. I would have to define my own modeline (with =doom-modeline-def-modeline=), and it's just not worth it for me.
-*************** END
-
-
-On the other hand, there are some really useful features that are turned off in the modeline. We'll enable those now.
-
-First off, why *not* have Github notifications locally?
-*************** TODO Set up github user and password
-This definitely needs my  Github credentials to work. Hopefully it can work with my SSH key, though I'm doubtful. I'll need to set up a secrets file and everything for this.
-After that's done, =doom-modeline-github= can be enabled. No use turning it on till then.
-*************** END
 
 Next, even though we're displaying the perspective (read - "workspace") in the [[*Workspaces][echo area]], it's nice to have it in the modeline too.
 #+begin_src emacs-lisp
