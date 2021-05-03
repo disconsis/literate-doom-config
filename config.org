@@ -1422,8 +1422,14 @@ Add useless directories/files to =dired-omit-files= to reduce visual clutter in 
                  (or "."
                      ".."
                      ".git"
+                     ".gitmodules"
+                     "TAGS"
+                     (seq (* anything) ".lock")
+                     ;; python
                      "__pycache__"
-                     ".pytest_cache")
+                     ".pytest_cache"
+                     ;; haskell
+                     ".stack-work")
                  eol))))
 #+end_src
 
