@@ -479,6 +479,17 @@ The time format it uses can also look a bit better.
 (setq display-time-format "%-I:%M %P")
 #+end_src
 
+doom-modeline's =no-checker= icon looks a bit ugly. I'd rather not have this at all.
+#+begin_src emacs-lisp
+(when (featurep! :ui modeline)
+
+  (defun my/remove-no-checker-icon (args)
+    (unless (equal args '(no-checker)) args))
+
+  (advice-add #'doom-modeline-update-flycheck-icon
+              :filter-args #'my/remove-no-checker-icon))
+#+end_src
+
 ** Tooltips
 Tooltips look a lot cleaner than spamming messages in the echo area, and don't require looking away as much.
 This is useful in a variety of unexpected places (like PDFs, for showing annotation contents).
