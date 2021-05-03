@@ -1096,6 +1096,16 @@ A frame level of 2 is almost always the right choice. I would rather not put thi
 
 ** TODO Consider installing =org-sidebar=
 
+** PDF exporting using =minted=
+#+begin_src emacs-lisp
+(after! org
+  (setq org-latex-listings 'minted
+        org-latex-packages-alist '(("" "minted"))
+        org-latex-pdf-process
+        '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")))
+#+end_src
+
 * Spacemacsy keybindings
 Make some keybindings a bit more like Spacemacs.
 ~SPC :~ (=M-x=) in particular is really hard to hit for such a commonly-used command.
