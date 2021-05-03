@@ -746,7 +746,7 @@ When I was using the default variable-pitch font, I spruced up headings by chang
 #+begin_src emacs-lisp
 (defvar +org-heading-font nil
   "Font family to use for org headings.")
-(defvar +org-heading-height 1.2
+(defvar +org-heading-height 1.0
   "Height multiplier to use for org headings")
 
 (after! org
@@ -761,7 +761,7 @@ When I was using the default variable-pitch font, I spruced up headings by chang
 The first few default bullets are okay, but the later ones look a bit ugly. The progression of bullets is also not very uniform.
 #+begin_src emacs-lisp
 (after! org-superstar
-  (setq org-superstar-headline-bullets-list '("☰" "☱" "☲" "☳" "☴" "☵" "☶" "☷")))
+  (setq org-superstar-headline-bullets-list '("§")))
 #+end_src
 
 We can also display bullets as checkmarks for todo headings.
