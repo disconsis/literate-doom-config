@@ -1418,11 +1418,13 @@ Add useless directories/files to =dired-omit-files= to reduce visual clutter in 
 (after! dired
   (require 'rx)
   (setq dired-omit-files
-        (rx (or (seq bol "." eol)
-                (seq bol ".." eol)
-                (seq bol ".git" eol)
-                (seq bol "__pycache__" eol)
-                (seq bol ".pytest_cache" eol)))))
+        (rx (seq bol
+                 (or "."
+                     ".."
+                     ".git"
+                     "__pycache__"
+                     ".pytest_cache")
+                 eol))))
 #+end_src
 
 * Force-quit
